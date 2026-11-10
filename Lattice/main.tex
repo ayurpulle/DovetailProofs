@@ -33,7 +33,7 @@
 \newcommand{\J}{\mathsf{J}}
 \newcommand{\id}{\mathrm{id}}
 
-\title{Congruence Obstructions in Exact Predictive Agents}
+\title{What Every Exact Predictor Must Compute:\\ Divisibility Lower Bounds from Predictive Monoids}
 \author{Ayur Pulle\\ \small{Dovetail Research}}
 \date{\small August 2026}
 
@@ -44,27 +44,33 @@
 \begin{abstract}
 Every exact predictor of a stochastic process contains, as a quotient
 of its update dynamics, the process's canonical predictive machine.
-We prove this at the level of transition monoids: a descent lemma
-converts the state level refinement into a
-surjection of monoids, so the canonical congruence lattice appears as
-an interval inside every exact predictor's lattice of admissible
-lumpings. Below the predictive
-machine sits a possibility machine recording only which futures can
-occur, contributing a nested outer interval, above it, the minimal
-linear predictor embeds into an extension of the canonical monoid by
-transition likelihoods, and passing back to the canonical monoid is
-exactly the projection that discards the likelihood coordinate.  A word by word
-companion bounds forced memory, after each observed word, every exact
-predictor retains at least as many distinctions as the canonical
-machine. The layers separate.  Generic first order
-Markov chains carry a non distributive $M_3$ interval although a
-last symbol predictor suffices, with every probability value sitting
-in the likelihood extension.  For two standard example processes we
-compute exactly that the entire canonical monoid is determined by
-the pattern of possible words alone.  Non distributivity of the inherited interval is
-therefore generic and certifies nothing about internal
-representations, which obstructions genuinely constrain decomposition
-remains open.
+We prove this at the level of transition monoids and ask which
+properties of the canonical monoid $S_p$ are thereby forced on every
+predictor.  The canonical monoid is the syntactic monoid of the map
+from histories to predictive states, so computing predictive states
+and multiplying in $S_p$ are the same task.  For predictors with
+finitely many states, every subgroup of $S_p$ is the image of a
+subgroup of the predictor's update monoid, and aperiodicity and
+Krohn--Rhodes group complexity are bounded accordingly, with the
+bounds attained.  A predictor that stores its whole history shows
+that finiteness cannot be dropped.  For predictors with no recurrent
+state the constraint moves to the function computed: exact
+next-symbol prediction lies in $\mathrm{AC}^0$ when $S_p$ is
+aperiodic and is $\mathrm{NC}^1$-complete when $S_p$ contains a
+non-solvable group, so no constant-depth transformer of logarithmic
+precision predicts such a process at all lengths unless
+$\mathrm{TC}^0=\mathrm{NC}^1$.  A word by word companion bounds
+forced memory, and a subgroup of $S_p$ forces as many live states as
+its smallest faithful permutation action.  All of these invariants
+read $S_p$ alone.  They are blind to transition likelihoods, which we
+isolate in an extension of $S_p$ containing the minimal linear
+predictor, and for two standard example processes we compute that
+$S_p$ is determined by the pattern of possible words alone.  The
+lattice of congruences of $S_p$, the invariant this work began from,
+is also inherited, as an interval, but it is non-distributive already
+for first order Markov chains predicted by storing the last symbol,
+and certifies nothing about internal representations.  Whether
+trained networks represent $S_p$ is not addressed.
 \end{abstract}
 
 
@@ -79,29 +85,60 @@ Our question is: which predictive structure, the canonical
 predictive states together with their observation labelled updates,
 must every such agent contain, or realise as a quotient?
 
-The answer is a tower of quotient theorems together with one
-quantitative bound: every reachable exact predictor maps onto the
-process's canonical predictive machine, which maps onto a coarser
-possibility machine recording which futures can occur, the minimal
-linear predictor embeds into a likelihood extension of the canonical
-monoid, and the process fixes a word by word lower bound on the
-distinctions any exact predictor must retain
-(Sections~\ref{sec:agent}--\ref{sec:quantitative}, \ref{sec:rank}).
-Each quotient plants an interval of admissible lumpings inside the
-predictor's congruence lattice, we call the non distributive
-configurations these intervals can carry \emph{obstructions}: no
-reimplementation can remove them, and they provably obstruct exactly
-one thing, a union/intersection coordinate representation of the
-lattice of admissible lumpings (Section~\ref{sec:coordinates}).
-Whether they obstruct any decomposition of the agent itself is left
-open.  The interval reads exactly the middle layer of the tower,
-blind to likelihoods by construction.
-All of this concerns prediction, not control, Section
-\ref{sec:controllers} shows fixed-task optimality is insufficient and
-states the assumptions under which a controller inherits the same
-structure.  No claim is made that a neural network's raw hidden state
+The starting point is a quotient theorem.  Every reachable exact
+predictor maps onto the process's canonical predictive machine, and a
+descent lemma turns that map of states into a surjection of
+transition monoids $\Phi:S_A\to S_p$ (Section~\ref{sec:agent}).  The
+canonical monoid $S_p$ is therefore a quotient of the update monoid
+of every exact predictor, and the paper asks which of its properties
+are forced on the predictor as a result.
+
+The answer has four parts.  First, $S_p$ is the syntactic monoid of
+the map sending a history to its predictive state, so computing
+predictive states and multiplying in $S_p$ are two forms of one task
+(Section~\ref{sec:syntactic}).  Second, for a predictor with finitely
+many states, every subgroup of $S_p$ is the image of a subgroup of
+$S_A$, and aperiodicity and group complexity are bounded by those of
+$S_p$, with equality attained by the canonical machine.  A predictor
+that stores its entire history has a free update monoid, so the
+finiteness hypothesis is necessary.  Third, for exactly such
+predictors, a transformer reading the whole history being the
+intended case, the constraint is on the function computed: exact
+prediction has the circuit complexity of the word problem of $S_p$,
+which is governed by the groups $S_p$ contains
+(Section~\ref{subsec:parallel}).  Fourth, a word by word bound: the
+number of live states any exact predictor holds after a word $w$ is
+at least the live rank of $\tau_w$, and a subgroup of $S_p$ forces at
+least as many as its smallest faithful permutation action
+(Section~\ref{sec:rank}).
+
+These invariants all read the monoid $S_p$ and nothing else.  Two
+further layers sit around it.  Below is a possibility machine
+recording only which futures can occur (Section~\ref{sec:support}),
+above, the minimal linear predictor embeds into an extension of $S_p$
+by transition likelihoods, and passing back to $S_p$ is exactly the
+projection that discards the likelihood coordinate
+(Sections~\ref{sec:linear}, \ref{sec:quantitative}).  The layers
+separate in examples, which bounds what any invariant of $S_p$ can
+say.
+
+The invariant this work began from is the lattice of congruences of
+$S_p$.  It is inherited by every exact predictor as an interval, and
+the non-distributive configurations it can carry cannot be removed by
+any reimplementation.  But they are generic: a first order Markov
+chain whose exact predictor stores only the last symbol already
+carries an $M_3$, while every invariant of the previous paragraphs is
+trivial on it.  Section~\ref{sec:congruence} records the inheritance
+and its limits.
+
+All of this concerns prediction, not control.
+Section~\ref{sec:controllers} states the one hypothesis under which a
+controller inherits the same structure and why optimality does not
+supply it.  No claim is made that a neural network's raw hidden state
 is automatically a linear realisation, or that any of this locates
-features in activations.
+features in activations.  Whether trained networks represent the
+elements of $S_p$, or only their effect on the current state, is an
+empirical question this paper does not address.
 
 The state level foundations are classical: identification of histories
 by their conditional future laws, with any equally predictive rival
@@ -110,37 +147,60 @@ refining that partition
 $\varepsilon$-transducer for action/output processes
 \cite{BarnettCrutchfield2015}, and Hankel minimisation
 with its quotient onto the minimal realisation
-\cite{Fliess1974,Jaeger2000}.  Two lines are engaged rather
-than built on: behavioural recovery of an environment from
-goal conditioned policies
-\cite{Richens2025,Cifuentes2026,LuEtAl2026}, taken up conditionally in
+\cite{Fliess1974,Jaeger2000}.  The algebraic tools are classical as
+well: syntactic monoids and the star-free theorem
+\cite{Pin1986,Schutzenberger1965}, the Krohn--Rhodes decomposition
+and group complexity \cite{KrohnRhodes1965,RhodesSteinberg2009}, and
+the circuit complexity of word problems
+\cite{BarringtonTherien1988,Barrington1989,BarringtonEtAl1992}.
+Their use to bound transformers is established for automata and
+formal languages given in advance
+\cite{MerrillSabharwal2023,LiuEtAl2023,YangChiangAngluin2024}.  What
+is added here is the passage from a stochastic process to the monoid
+those results apply to, and the proof that this monoid is forced on
+every exact predictor.  Two lines are engaged rather than built on:
+behavioural recovery of an environment from goal conditioned policies
+\cite{Richens2025,Cifuentes2026,LuEtAl2026}, taken up in
 Section~\ref{sec:controllers}, and the empirical study of predictive
 structure in trained networks \cite{ShaiEtAl2024}, whose example
 processes are computed exactly in
 Section~\ref{subsec:computed-support}.
 
-The contribution is the transition monoid layer above these results:
+The contributions are:
 \begin{enumerate}[label=(\alph*)]
   \item a single descent lemma that converts any update commuting
-        surjection of state machines
-        into a monoid surjection and an inherited congruence interval
-        (Lemma~\ref{lem:descent}),
-  \item the tower: nested inherited intervals recording possibility
-        and prediction, and an embedding of the minimal linear
-        predictor into a likelihood extension of the canonical monoid
-        whose second coordinate projection is the congruence
-        invariant (Sections~\ref{sec:support}, \ref{sec:quantitative}),
-  \item a word by word memory bound: the live rank profile of the process
-        lower bounds the distinctions any exact predictor retains
-        after each word, with total forgetting and unbounded memory
-        both realised by explicit processes (Section~\ref{sec:rank}),
-  \item exact computations locating the congruence structure of two
-        standard example processes entirely at the possibility layer,
-        and of generic Markov chains entirely at the likelihood layer
-        (Sections~\ref{sec:support}, \ref{sec:reset}),
-  \item a scope limit: non distributivity of the inherited interval is
-        generic and is not a certificate of entangled features
-        (Sections~\ref{sec:reset}, \ref{sec:coordinates}).
+        surjection of state machines into a monoid surjection, making
+        $S_p$ a quotient of every exact predictor's update monoid
+        (Lemma~\ref{lem:descent}, Corollary~\ref{cor:quotient}),
+  \item the identification of $S_p$ and of the possibility monoid as
+        syntactic monoids (Lemma~\ref{lem:syntactic}),
+  \item the transport of subgroups, aperiodicity and group complexity
+        to every finite exact predictor, attained by the canonical
+        machine, with an unbounded-memory predictor showing
+        finiteness is needed (Theorem~\ref{thm:transport},
+        Example~\ref{ex:free-predictor}),
+  \item for predictors with no recurrent state, a two-way reduction
+        between exact prediction and the word problem of $S_p$,
+        placing prediction in a circuit class determined by the
+        groups in $S_p$, with a conditional impossibility result for
+        constant-depth transformers
+        (Theorem~\ref{thm:pred-complexity},
+        Corollary~\ref{cor:transformers}),
+  \item a word by word memory bound: the live rank profile of the
+        process lower bounds the distinctions any exact predictor
+        retains after each word, and subgroups of $S_p$ sit at rank
+        levels that bound them (Theorem~\ref{thm:rank-bound},
+        Proposition~\ref{prop:group-rank}),
+  \item the layers around $S_p$: a possibility quotient below and a
+        likelihood extension above, with exact computations placing
+        two standard example processes entirely at the possibility
+        layer, generic Markov chains entirely at the likelihood
+        layer, and one process strictly between
+        (Sections~\ref{sec:support}, \ref{sec:quantitative}),
+  \item a scope limit on the congruence lattice: its inherited
+        interval is non-distributive generically and is not a
+        certificate of entangled features
+        (Section~\ref{sec:congruence}).
 \end{enumerate}
 All code supporting the computations, exact and reproducible, is
 available in the paper's repository \cite{DovetailRepo}.
@@ -278,11 +338,8 @@ $w=o_1\cdots o_n$, and likewise for $\tau_w$.  Then
 \[
   \Phi(\delta_w)=\tau_w
 \]
-is a well-defined surjective monoid homomorphism $\Phi:S_Q\to S_Y$, and,
-with $\kappa=\ker\Phi$,
-\[
-  \Con(S_Y)\cong[\kappa,\top]\subseteq\Con(S_Q).
-\]
+is a well-defined surjective monoid homomorphism $\Phi:S_Q\to S_Y$.
+In particular $S_Y$ is a quotient of $S_Q$.
 \end{lemma}
 
 \begin{proof}
@@ -292,48 +349,25 @@ $\tau_w\circ L=\tau_v\circ L$, and surjectivity of $L$ forces
 $\tau_w=\tau_v$, so $\Phi$ is well-defined.  For words $v,w$ the convention
 gives $\delta_w\circ\delta_v=\delta_{vw}$ and
 $\tau_w\circ\tau_v=\tau_{vw}$, so $\Phi$ respects composition, and it hits
-every generator $\tau_o$, so it is surjective.  The interval statement is
-the congruence correspondence theorem for the surjection $\Phi$
-\cite{Howie1995}.
+every generator $\tau_o$, so it is surjective.
 \end{proof}
-
-Congruences and their lattice are used throughout, we fix the
-vocabulary here.  A congruence on a monoid $S$ is an equivalence relation
-$\sim$ compatible with multiplication on both sides: $s\sim t$ implies
-$asb\sim atb$ for all $a,b\in S$.  
-
-
-Compatibility is what makes
-congruences the admissible lumpings of dynamics: it says that
-substituting indistinguishable transformations into any past and future
-dynamical context cannot make them distinguishable, so once
-admissibility is defined as a lumping of transition operators, the
-admissible hierarchy is exactly $\Con(S)$.\footnote{This is a
-conditional statement: it does not make every algebraic congruence
-meaningful for a particular agent's dynamics.}  This concerns
-transformations, not predictive states, coarse graining states is a
-different construction.
-
-$\Con(S)$ denotes the set of all congruences on $S$, ordered by
-refinement, the intersection of two congruences is a congruence, and any
-family of congruences has a coarsest common refinement, so $\Con(S)$ is a
-lattice, with bottom the equality relation and top the relation merging
-everything.  The interval $[\kappa,\top]$ consists of the congruences at
-least as coarse as $\kappa$, and the correspondence theorem says these are
-in order-preserving bijection with the congruences of the quotient
-$S/\kappa$.  Finally, $M_3$ and $N_5$ are the two five-element lattices shown in
-Figure~\ref{fig:m3n5}, whose presence as a sublattice is equivalent to
-the failure of distributivity (Section~\ref{sec:coordinates}).
-
 
 No structure on $Q$ or $Y$ is assumed: no dead state, no linearity, no
 probabilistic interpretation.  Everything specific to prediction enters
-through the construction of a particular surjection $L$.  One
-convention remark for later use: a congruence is compatible with
-multiplication on both sides, so a monoid and its opposite (the same
-elements multiplied in reverse order) have the same congruences,
-$\Con(S)=\Con(S^{\mathrm{op}})$, composition-order conventions
-therefore never affect congruence lattices.
+through the construction of a particular surjection $L$.  The lemma
+turns a statement about states into one about monoids, and from there
+the question of this paper is which properties of a monoid pass to
+its quotients, or more generally to its divisors, a monoid $T$
+\emph{divides} $S$ when $T$ is a quotient of a submonoid of $S$.
+Sections~\ref{sec:syntactic} and~\ref{sec:rank} transport the
+informative ones.  Section~\ref{sec:congruence} treats the most
+obvious one, the lattice of congruences, and shows why it is not
+enough.  One convention remark for later use: a monoid and its
+opposite (the same elements multiplied in reverse order) have the
+same congruences, the same subgroups up to isomorphism, and the same
+idempotents, so composition-order conventions never affect the
+invariants used below.
+
 
 
 \begin{definition}
@@ -424,31 +458,41 @@ monoids.
 Let $S_A=\langle\delta_o:o\in\Obs\rangle\subseteq\mathcal T_Q$.
 
 \begin{corollary}
-\label{cor:con-inheritance}
+\label{cor:quotient}
 Applying Lemma~\ref{lem:descent} to the surjection of
 Theorem~\ref{thm:predictor-quotient} yields a surjective monoid
 homomorphism
 \[
   \Phi:S_A\rightarrow S_p,
   \qquad
-  \Phi(\delta_w)=\tau_w,
+  \Phi(\delta_w)=\tau_w.
 \]
-and, with $\kappa=\ker\Phi$,
-\[
-  \Con(S_p)\cong[\kappa,\top]\subseteq\Con(S_A).
-\]
-In particular, if $\Con(S_p)$ is non-distributive then so is
-$\Con(S_A)$: every $M_3$ or $N_5$ sublattice of $\Con(S_p)$ occurs
-inside the interval $[\kappa,\top]$, since an interval is closed under
-meets and joins.
+So $S_p$ is a quotient, and in particular a divisor, of the update
+monoid of every reachable exact predictive agent.
 \end{corollary}
 
-\begin{proof}
-Immediate from Lemma~\ref{lem:descent}.
-\end{proof}
+This is the result for agents.  Different exact predictors may make
+implementation distinctions that $\Phi$ identifies, but none can
+avoid $S_p$ as a quotient.  We write $\kappa=\ker\Phi$ for the kernel
+of $\Phi$, the relation $\Phi(s)=\Phi(t)$ on $S_A$.  It is a
+congruence: an equivalence relation compatible with multiplication on
+both sides.
 
-This is the result for agents, different exact predictors may add
-implementation distinctions below $\kappa$, but cannot remove the predictive interval above it.
+\begin{remark}[Uniformly accurate predictors]
+\label{rem:uniform}
+When $X_p$ is finite, exactness can be weakened.  Fix any metric on
+future laws and let $\gamma>0$ be the least distance between two
+distinct elements of $X_p$.  Suppose an agent satisfies every
+condition of the definition except exactness, and its readout obeys
+$d(F(\delta_u(q_0)),q_u)<\gamma/2$ for every possible $u$.  Then
+$q_u$ is the unique element of $X_p$ within $\gamma/2$ of the
+readout, so composing $F$ with rounding to the nearest element of
+$X_p$ gives an exact agent with the same states and updates.  Every
+result below that is stated for exact agents therefore holds for
+agents accurate to within $\gamma/2$ on all possible histories.  The
+accuracy must be uniform: a predictor that is accurate on most
+histories only is not covered (Section~\ref{sec:results}).
+\end{remark}
 
 \section{The possibility layer}
 \label{sec:support}
@@ -457,8 +501,8 @@ The predictive state $q_u$ records how likely each future is.  A coarser
 record keeps only which futures are possible at all, we call this
 bare possibility.  This section shows
 that this coarser structure is itself a canonical machine, sitting below
-the predictive one, and that every exact predictor therefore inherits a
-second, nested congruence interval.
+the predictive one, so that every exact predictor has a second, coarser
+forced quotient.
 
 \begin{definition}[Follower sets]
 For $p(u)>0$, the follower set of $u$ is the set of futures it leaves
@@ -523,25 +567,15 @@ $\dagger$ both sides are $\dagger$.
 \begin{corollary}
 \label{cor:support-tower}
 Lemma~\ref{lem:descent} applied to $\sigma$ gives a surjective monoid
-homomorphism $S_p\to S_{\mathrm{supp}}$ with kernel
-$\kappa_{\mathrm{supp}}$, so
+homomorphism $S_p\to S_{\mathrm{supp}}$, whose kernel we write
+$\kappa_{\mathrm{supp}}$.  Composing with
+Theorem~\ref{thm:predictor-quotient}, every reachable exact predictive
+agent $A$ has a chain of quotients
 \[
-  \Con(S_{\mathrm{supp}})
-  \cong[\kappa_{\mathrm{supp}},\top]\subseteq\Con(S_p).
+  S_A\longrightarrow S_p\longrightarrow S_{\mathrm{supp}},
 \]
-Composing with Theorem~\ref{thm:predictor-quotient}, every reachable
-exact predictive agent $A$ carries a nested pair of intervals
-\[
-  \Con(S_{\mathrm{supp}})
-  \cong[\kappa',\top]
-  \;\subseteq\;
-  [\kappa,\top]
-  \cong\Con(S_p)
-  \;\subseteq\;
-  \Con(S_A),
-\]
-where $\kappa'\supseteq\kappa$ is the kernel of the composite
-$S_A\to S_p\to S_{\mathrm{supp}}$.
+and the kernel $\kappa'$ of the composite contains
+$\kappa=\ker\Phi$.
 \end{corollary}
 
 \begin{proof}
@@ -552,21 +586,20 @@ composite, the kernels nest because the composite identifies at least as
 much as the first factor.
 \end{proof}
 
-Every exact predictor therefore inherits two layers of forced structure:
-an outer interval recording distinctions of possibility, and inside it a
-finer interval recording distinctions of conditional expectation.  The
-outer layer is purely combinatorial: it depends only on the set $L_p$,
-not on any probability value.\footnote{In the terminology of symbolic
+Every exact predictor therefore has two layers of forced structure:
+a coarse quotient recording distinctions of possibility, and above it
+a finer one recording distinctions of conditional expectation.  The
+coarse layer is purely combinatorial: it depends only on the set
+$L_p$, not on any probability value.\footnote{In the terminology of symbolic
 dynamics, $\widehat X_{\mathrm{supp}}$ with the updates $\sigma_o$ is
 the follower-set automaton of the language $L_p$, for stationary
 processes whose support is a sofic shift this is a standard object
 \cite{LindMarcus1995}, and the quotient $\sigma$ is the finite-history
 analogue of the relation between the history $\varepsilon$-machine and
-the Krieger cover \cite{TraversCrutchfield2025}.  We use none of that
-theory beyond the name:
+the Krieger cover \cite{TraversCrutchfield2025}.  In this section
 the layer enters only as a second instance of Lemma~\ref{lem:descent},
-and no logical or language-theoretic classification of $L_p$ is
-claimed or needed.}
+Lemma~\ref{lem:syntactic} later identifies $S_{\mathrm{supp}}$ with
+the syntactic monoid of $L_p$.}
 
 
 
@@ -579,18 +612,18 @@ Conversely, if some word is impossible, take a shortest impossible $wo$
 with $p(w)>0$, then $\sigma_o$ sends $F_w$ to $\dagger$ and is not the
 identity.  In particular, the full-support Markov chains of
 Section~\ref{sec:reset} have a trivial possibility layer: their entire
-canonical structure, including the $M_3$ interval, lives in the
-predictive layer.  A process can thus force rich structure at one layer
+canonical structure lives in the predictive layer.  A process can thus force rich structure at one layer
 and none at the other.
 \end{remark}
 
 \subsection{Two computed examples: the bottom layer can be everything}
 \label{subsec:computed-support}
 
-The nested intervals of Corollary~\ref{cor:support-tower} can degenerate
-in either direction.  Remark~\ref{rem:full-support} gave one extreme,
-the opposite occurs in two small hidden-Markov processes used as
-standard examples in the interpretability literature
+The quotient $S_p\to S_{\mathrm{supp}}$ of
+Corollary~\ref{cor:support-tower} can degenerate in either direction.
+Remark~\ref{rem:full-support} gave one extreme, where it collapses
+everything, the opposite occurs in two small hidden-Markov processes
+used as standard examples in the interpretability literature
 \cite{ShaiEtAl2024}.  The first, Z1R, cycles deterministically through
 ``0, then 1, then a fair coin''.  The second, RRXOR, emits two fair
 coins and then their exclusive-or, repeatedly.  Both have impossible
@@ -598,11 +631,9 @@ words, so neither has a trivial possibility layer.
 
 For each process we computed, in exact rational arithmetic from the
 stationary initial condition, the predictive states, the canonical
-monoid, its full congruence lattice, and the support
-quotient, scripts and outputs are in the repository
-\cite{DovetailRepo}.  For Z1R: $|X_p|=7$, $|S_p|=14$, $|\Con(S_p)|=8$, with
-exactly one $M_3$ sublattice.  For RRXOR: $|X_p|=36$, $|S_p|=73$,
-$|\Con(S_p)|=29$, again with exactly one $M_3$.  In both processes the
+monoid, and the support quotient, scripts and outputs are in the
+repository \cite{DovetailRepo}.  For Z1R: $|X_p|=7$ and $|S_p|=14$.
+For RRXOR: $|X_p|=36$ and $|S_p|=73$.  In both processes the
 state map $\sigma$ is genuinely lossy: Z1R merges one pair of
 predictive states, and RRXOR merges its $36$ live states into $20$
 follower-set classes.  Yet in both, the monoid map
@@ -611,29 +642,622 @@ $\kappa_{\mathrm{supp}}$ is the equality relation.  Words that act
 identically on bare possibility already act identically on prediction.
 
 Two consequences.  First, states and transformations separate cleanly:
-coarse-graining the states loses information, while the induced lumping
-of the transformations loses none, a concrete instance of the
-distinction drawn in the congruence primer of Section~\ref{sec:agent},
-exhibited inside a single
-process.  Second, every congruence of $S_p$, including the $M_3$
-witness, the concrete sublattice exhibiting non-distributivity, is an
-invariant of the support language $L_p$ alone: any
-process with the same impossibility pattern and arbitrary other
-probabilities carries the same witness.  For these processes, whatever
-the congruence interval detects, it detects without consulting a single
-probability value.
+coarse-graining the states loses information, while the induced map
+of transformations loses none.  Second, for these processes every
+invariant of $S_p$ is an invariant of the support language $L_p$
+alone, and is read off without consulting a single probability value.
 
 Together with Remark~\ref{rem:full-support}, this exhibits both poles.
 The full-support Markov chains of Section~\ref{sec:reset} have
-$\kappa_{\mathrm{supp}}=\top$, and their $M_3$ contains
-$\kappa_{\mathrm{supp}}$ in none of its five elements except the top:
-that witness is built entirely from probabilities.  Z1R and RRXOR have
-$\kappa_{\mathrm{supp}}=\bot$, and their witnesses lie at the
-possibility layer in the strongest sense.  Because $\kappa_{\mathrm{supp}}$ is trivial in both processes, descent
-holds here for every congruence, not only the witnesses, these examples
-therefore do not test whether impossibility-built witnesses descend in
-general.  A process with $\bot\subsetneq\kappa_{\mathrm{supp}}
-\subsetneq\top$ would, and we do not have one.
+$\kappa_{\mathrm{supp}}=\top$, and Z1R and RRXOR have
+$\kappa_{\mathrm{supp}}=\bot$.  The next example lies strictly
+between.
+
+\begin{example}[A strictly intermediate kernel]
+\label{ex:one-zero}
+Let $p$ be the first-order Markov chain on $\Obs=\{1,2,3\}$ with
+uniform initial distribution and transition matrix
+\[
+  \begin{pmatrix}
+    0&\frac12&\frac12\\[2pt]
+    \frac12&\frac16&\frac13\\[2pt]
+    \frac13&\frac12&\frac16
+  \end{pmatrix},
+\]
+whose only zero forbids the word $11$.  As in
+Section~\ref{sec:reset}, the live predictive states are $q_\eps$ and
+the three states $g_1,g_2,g_3$ after a last symbol, pairwise distinct
+because the rows are distinct and none is uniform.  The updates
+$\tau_2$ and $\tau_3$ reset every live state to $g_2$ and to $g_3$,
+while $\tau_1$ sends $g_1$ to $\dagger$ and every other live state to
+$g_1$.  There are two follower sets: after a history ending in $1$,
+the words that avoid $11$ and do not begin with $1$, and after every
+other history, including the empty one, all words that avoid $11$.
+So $\sigma$ merges $q_\eps,g_2,g_3$.
+
+Then $\tau_2\ne\tau_3$ but $\sigma_2=\sigma_3$, so
+$\kappa_{\mathrm{supp}}\ne\bot$, and $\sigma_1$ is not the identity,
+so $\kappa_{\mathrm{supp}}\ne\top$.  Exact enumeration gives
+$|S_p|=8$ and $|S_{\mathrm{supp}}|=6$, the kernel merging $\tau_2$
+with $\tau_3$ and $\tau_{12}$ with $\tau_{13}$ and nothing else.  Any
+transition matrix with distinct rows and a single zero on the
+diagonal behaves the same way.
+\end{example}
+
+\section{The syntactic reading and what transports}
+\label{sec:syntactic}
+
+Corollary~\ref{cor:quotient} makes $S_p$ a quotient of every exact
+predictor's update monoid.  This section identifies $S_p$ and
+$S_{\mathrm{supp}}$ with classical objects of language theory, and
+then records the invariants that pass along the surjection
+$\Phi:S_A\to S_p$ when the predictor is finite: subgroups,
+aperiodicity, and group complexity.
+
+\subsection{Both canonical monoids are syntactic}
+
+Let $f:\Obs^*\to Y$ be any map.  Its syntactic congruence is
+\[
+  w\equiv_f w'
+  \quad\Longleftrightarrow\quad
+  f(uwv)=f(uw'v)\ \text{ for all }u,v\in\Obs^*,
+\]
+and its syntactic monoid is $M(f)=\Obs^*/{\equiv_f}$.  For a language
+$K\subseteq\Obs^*$ write $\equiv_K$ and $M(K)$ for the congruence and
+monoid of its indicator function, this is the usual syntactic monoid
+of $K$ \cite{Pin1986}.
+
+Define the state labelling of $p$ by
+\[
+  \nu:\Obs^*\to\widehat X_p,
+  \qquad
+  \nu(u)=
+  \begin{cases}
+    q_u,&p(u)>0,\\
+    \dagger,&p(u)=0.
+  \end{cases}
+\]
+Then $\nu(u)=\tau_u(q_\eps)$ for every word $u$: if $p(u)>0$ this is
+the definition of $\tau_u$, and otherwise the shortest impossible
+prefix of $u$ sends $q_\eps$ to $\dagger$, which is absorbing.  For a
+live state $x\in X_p$ write
+\[
+  K_x=\{u\in\Obs^*:\nu(u)=x\}
+\]
+for the set of histories that lead to $x$.
+
+\begin{lemma}[Syntactic lemma]
+\label{lem:syntactic}
+For all words $w,w'$:
+\begin{enumerate}[label=(\roman*)]
+  \item $\tau_w=\tau_{w'}$ if and only if $w\equiv_\nu w'$.  Hence
+        $\tau_w\mapsto[w]$ is a bijection $S_p\to M(\nu)$, and it
+        reverses products, so $S_p\cong M(\nu)^{\mathrm{op}}$.
+  \item $\sigma_w=\sigma_{w'}$ if and only if $w\equiv_{L_p}w'$.
+        Hence $S_{\mathrm{supp}}\cong M(L_p)^{\mathrm{op}}$.
+  \item $\equiv_\nu\;=\bigcap_{x\in X_p}\equiv_{K_x}$.  Hence each
+        $M(K_x)$ is a quotient of $M(\nu)$, and $M(\nu)$ embeds in the
+        product $\prod_{x\in X_p}M(K_x)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(i) Both $\tau_w$ and $\tau_{w'}$ fix $\dagger$, and every live state
+is $\nu(u)$ for some $u$ with $p(u)>0$, with
+$\tau_w(\nu(u))=\nu(uw)$.  If $p(u)=0$ then
+$\nu(uw)=\nu(uw')=\dagger$.  So $\tau_w=\tau_{w'}$ exactly when
+$\nu(uw)=\nu(uw')$ for every $u\in\Obs^*$.  This is the syntactic
+condition with $v=\eps$, and it implies the condition for every $v$
+because $\nu(uwv)=\tau_v(\nu(uw))$.  The map reverses products because
+$\tau_w\circ\tau_v=\tau_{vw}$.
+
+(ii) Extend the follower-set notation to all words by
+$F_u=\{v:uv\in L_p\}$, which is empty exactly when $u\notin L_p$,
+since $\eps\in F_u$ otherwise.  Reading $\dagger$ as the empty set,
+the argument of (i) applied to $u\mapsto F_u$ and the updates
+$\sigma_o$ shows that $\sigma_w=\sigma_{w'}$ exactly when
+$F_{uw}=F_{uw'}$ for every $u$.  That is the statement that
+$uwv\in L_p$ if and only if $uw'v\in L_p$, for all $u,v$.
+
+(iii) If $w\equiv_\nu w'$ then $\nu(uwv)=x$ if and only if
+$\nu(uw'v)=x$, so $w\equiv_{K_x}w'$.  Conversely suppose
+$w\equiv_{K_x}w'$ for every live $x$, and fix $u,v$.  If
+$\nu(uwv)=x$ is live, then $uwv\in K_x$, so $uw'v\in K_x$ and
+$\nu(uw'v)=x$, and symmetrically.  If neither value is live, both are
+$\dagger$.
+\end{proof}
+
+No finiteness is used.  When $X_p$ is finite, part (i) says that
+$\widehat X_p$ is the minimal automaton of the labelling $\nu$ and
+$S_p$ is its transition monoid, and part (ii) says the same of
+$\widehat X_{\mathrm{supp}}$ and the language $L_p$ of possible
+words.  The question of
+Section~\ref{subsec:computed-support}, when $S_p\to S_{\mathrm{supp}}$
+is an isomorphism, therefore asks when the labelling $\nu$ and its
+support $L_p$ have the same syntactic congruence.  Passing to the
+opposite monoid changes none of the invariants used in this paper:
+congruences, subgroups up to isomorphism, and aperiodicity are the
+same for $S$ and $S^{\mathrm{op}}$.
+
+\begin{remark}[States and word problem]
+\label{rem:word-problem}
+Computing the predictive state of a history and multiplying in $S_p$
+are two forms of the same task.  The state is
+$\nu(u)=\tau_u(q_\eps)$, one product in $S_p$ applied to one point.
+Conversely, when $X_p$ is finite, fix a history $u_x$ with
+$\nu(u_x)=x$ for each live $x$, then $\tau_w$ is the tuple
+$(\nu(u_xw))_{x\in X_p}$, that is, $|X_p|$ state computations with
+fixed prefixes.
+\end{remark}
+
+\subsection{Transport to finite predictors}
+
+A subgroup of a monoid $S$ is a subsemigroup that is a group, its
+identity is an idempotent of $S$ and need not be the identity of $S$.
+A finite monoid is aperiodic when all its subgroups are trivial,
+equivalently when for every $s$ there is $n$ with $s^n=s^{n+1}$.  A
+monoid $T$ divides $S$ when $T$ is a quotient of a submonoid of $S$.
+The group complexity $c(S)$ of a finite monoid is the least number of
+group factors in a wreath product of groups and aperiodic monoids,
+taken alternately, that $S$ divides, it is finite by the
+Krohn--Rhodes theorem, and it is monotone under division
+\cite{KrohnRhodes1965,RhodesSteinberg2009}.
+
+\begin{theorem}[Transport]
+\label{thm:transport}
+Let $A$ be a reachable exact predictive agent for $p$ whose update
+monoid $S_A$ is finite, as it is whenever $Q$ is finite.  Then $S_p$
+is finite, and:
+\begin{enumerate}[label=(\roman*)]
+  \item for every subgroup $G\subseteq S_p$ there is a subgroup
+        $H\subseteq S_A$ with $\Phi(H)=G$, in particular every group
+        that divides $S_p$ divides $S_A$,
+  \item if $S_A$ is aperiodic then $S_p$ is aperiodic,
+  \item $c(S_p)\le c(S_A)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+$S_p=\Phi(S_A)$ by Corollary~\ref{cor:quotient}, so it is
+finite and divides $S_A$.
+
+(i) The preimage $\Phi^{-1}(G)$ is a finite subsemigroup of $S_A$
+mapping onto $G$.  Choose a subsemigroup $H\subseteq\Phi^{-1}(G)$
+minimal subject to $\Phi(H)=G$.  For $a\in H$, the set $aH$ is a
+subsemigroup of $H$ with $\Phi(aH)=\Phi(a)G=G$, so $aH=H$ by
+minimality, and likewise $Ha=H$.  A semigroup in which $aH=H=Ha$ for
+every $a$ is a group.  The second statement holds because division is
+transitive.
+
+(ii) If $s^n=s^{n+1}$ in $S_A$ then
+$\Phi(s)^n=\Phi(s)^{n+1}$, and $\Phi$ is onto.
+
+(iii) Monotonicity of $c$ under division.
+\end{proof}
+
+Part (i) gives a subgroup mapping onto $G$, not a copy of $G$: a
+predictor may cover a two-element group in $S_p$ by a four-element
+cyclic group.  What cannot be avoided is $G$ as a divisor.  For a
+simple non-abelian group such as $A_5$ this means that $A_5$ is a
+composition factor of some subgroup of $S_A$.
+
+\begin{remark}[The bounds are attained]
+\label{rem:tight}
+The canonical machine
+$(\widehat X_p,q_\eps,\dagger,\{\tau_o\},\id)$ is itself a reachable
+exact predictive agent, with update monoid $S_p$.  So when $X_p$ is
+finite, the minimum of $c(S_A)$ over finite exact predictors is
+exactly $c(S_p)$, and $S_p$ is aperiodic if and only if some finite
+exact predictor has an aperiodic update monoid.
+\end{remark}
+
+\begin{example}[Finiteness cannot be dropped]
+\label{ex:free-predictor}
+Let $\Obs=\{0,1\}$ and let $p$ emit independent symbols, a fair coin
+at odd positions and a coin with bias $\tfrac13$ at even positions.
+Every word is possible, there are two predictive states according to
+the parity of the history length, and both symbols exchange them, so
+$S_p$ is the two-element group.  Now let $A$ store the entire
+history: $Q^+=\Obs^*$, $\delta_o(u)=uo$, and $F(u)=q_u$.  This is a
+reachable exact predictive agent, and $\delta_w=\delta_{w'}$ only
+when $w=w'$, so its update monoid is the free monoid on two
+generators.
+That monoid has no nontrivial subgroup, so the conclusion of
+Theorem~\ref{thm:transport}(i) fails for it, and since every finite
+monoid generated by two elements is a quotient of it, division by
+$S_A$ constrains nothing.  A predictor with unbounded memory can
+avoid every group in $S_p$ by never merging histories.  The example
+also shows that a group in $S_p$ need not be hard to compute: this
+one only counts the length of the history modulo two.
+\end{example}
+
+The reset chains of Section~\ref{sec:reset} are a first check on
+these invariants.  The monoid $R_n^1$ is aperiodic, every element
+satisfies $s^2=s$, so the last-symbol predictor that carries an $M_3$
+congruence interval is trivial for all three parts of
+Theorem~\ref{thm:transport}.
+
+\subsection{Predictors without a recurrent state}
+\label{subsec:parallel}
+
+Theorem~\ref{thm:transport} concerns agents that update a state, and
+Example~\ref{ex:free-predictor} shows it says nothing once memory is
+unbounded.  A model that reads the whole history at once, such as a
+transformer, is in that position: it has no update monoid to divide.
+For such models the constraint has to be placed on the function
+computed, and Lemma~\ref{lem:syntactic} with
+Remark~\ref{rem:word-problem} supplies it through circuit complexity.
+
+Assume throughout this subsection that $X_p$ is finite.  The
+next-symbol law of a possible history is
+\[
+  n_p(u)=\bigl(q_u(o)\bigr)_{o\in\Obs}
+  \qquad(u\in L_p),
+\]
+which depends on $u$ only through $\nu(u)$ and so takes finitely many
+values.  A family of functions, one for each input length,
+\emph{predicts $p$} when it returns $n_p(u)$ on every possible word
+$u$, nothing is required on impossible words.  The \emph{word
+problem} of $S_p$ is the task of computing $\tau_w$ from $w$.  We use
+the standard classes
+$\mathrm{AC}^0\subseteq\mathrm{ACC}^0\subseteq\mathrm{TC}^0
+\subseteq\mathrm{NC}^1$ of constant-depth circuit families with
+unbounded fan-in gates (respectively: and/or, with modular counting
+gates added, with threshold gates added) and of logarithmic-depth
+bounded fan-in families.  A reduction is a constant-depth,
+polynomial-size circuit with oracle gates.
+
+\begin{proposition}[Prediction and the word problem]
+\label{prop:pred-word}
+Assume $X_p$ is finite.
+\begin{enumerate}[label=(\roman*)]
+  \item $n_p(u)$ is a function of $\tau_u$, namely the next-symbol
+        law of the state $\tau_u(q_\eps)$.
+  \item The word problem of $S_p$ reduces to predicting $p$: there
+        is a constant $H$ such that $\tau_w$ is computed by a
+        constant-depth circuit of size $O(|w|)$ from the values of
+        any family that predicts $p$, queried at the words
+        $u_xw'v$, where $x$ ranges over $X_p$, $u_x$ is a fixed
+        history with $\nu(u_x)=x$, $w'$ over the prefixes of $w$,
+        and $v$ over the words of length less than $H$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) is $\nu(u)=\tau_u(q_\eps)$.
+
+(ii) By Remark~\ref{rem:word-problem} it suffices to compute
+$\nu(u_xw)$ for each $x$.  First decide whether $u_xw$ is possible.
+Write $w=o_1\cdots o_m$ and let $c_i$ be the $o_i$-coordinate of the
+value returned at $u_xo_1\cdots o_{i-1}$.  Then $u_xw\in L_p$ exactly
+when every $c_i$ is positive.  If $u_xw$ is possible, all the queried
+words are possible and the values are correct.  If it is not, let $i$
+be least with $u_xo_1\cdots o_i\notin L_p$, the query at
+$u_xo_1\cdots o_{i-1}$ is at a possible word and returns $c_i=0$, so
+the conjunction fails whatever the later queries return.
+
+If $u_xw$ is possible, its state is found as follows.  Since $X_p$ is
+finite and distinct states differ at some finite future, there is $H$
+such that the values $q(v)$ with $|v|\le H$ determine $q\in X_p$.
+For $u\in L_p$ and $v=v_1\cdots v_k$,
+\[
+  q_u(v)=\prod_{i=1}^{k}q_{uv_1\cdots v_{i-1}}(v_i),
+\]
+read as zero from the first vanishing factor on, and each factor is
+a coordinate of $n_p$ at a possible word.  So the values returned at
+the words $u_xwv$ with $|v|<H$ determine $\nu(u_xw)$ through a fixed
+finite table.  The conjunction has depth one and size $O(|w|)$, and
+the table has constant size.
+\end{proof}
+
+Since $n_p$ takes finitely many values, the reduction only needs each
+returned value rounded to the nearest of them.  The proposition
+therefore applies unchanged to any family whose output is at
+distance less than
+$\gamma/2$ from $n_p(u)$ on every possible $u$, where $\gamma$ is the
+least distance between two distinct values of $n_p$.
+
+\begin{theorem}[Complexity of exact prediction]
+\label{thm:pred-complexity}
+Assume $X_p$ is finite, and write
+$\tau(\Obs^t)=\{\tau_w:|w|=t\}$.
+\begin{enumerate}[label=(\roman*)]
+  \item Predicting $p$ is in $\mathrm{NC}^1$.  It is in
+        $\mathrm{AC}^0$ if $S_p$ is aperiodic, and in
+        $\mathrm{ACC}^0$ if every subgroup of $S_p$ is solvable.
+  \item If for some $t$ the set $\tau(\Obs^t)$ contains a nontrivial
+        group, then predicting $p$ is not in $\mathrm{AC}^0$.
+  \item If $S_p$ contains a non-solvable group, then predicting $p$
+        is $\mathrm{NC}^1$-complete.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) By Proposition~\ref{prop:pred-word}(i), predicting $p$ reduces to
+the word problem of the finite monoid $S_p$, which is in
+$\mathrm{NC}^1$, in $\mathrm{AC}^0$ for aperiodic monoids, and in
+$\mathrm{ACC}^0$ for monoids all of whose subgroups are solvable
+\cite{BarringtonTherien1988,BarringtonEtAl1992}.
+
+(ii) Let $G\subseteq\tau(\Obs^t)$ be a nontrivial group with identity
+$e$, and let $g\in G$ have prime order $r$.  Choose words $w_e,w_g$
+of length $t$ with $\tau_{w_e}=e$ and $\tau_{w_g}=g$.  Given bits
+$b_1,\ldots,b_n$, substitute $w_g$ for each $1$ and $w_e$ for each
+$0$.  The resulting word $w$ of length $tn$ has
+$\tau_w=g^{\,b_1+\cdots+b_n}$, which equals $e$ exactly when the sum
+is divisible by $r$.  So counting modulo $r$ reduces to the word
+problem of $S_p$, and by Proposition~\ref{prop:pred-word}(ii) to
+predicting $p$.  Counting modulo $r$ is not in $\mathrm{AC}^0$
+\cite{Smolensky1987}.
+
+(iii) Membership is (i).  For hardness, a non-solvable finite group
+has a nontrivial perfect subgroup, the last term of its derived
+series, so let $G\subseteq S_p$ be perfect and nontrivial with
+identity $e$.  We show $G\subseteq\tau(\Obs^t)$ for some $t$.  Fix a
+word $w_e$ for $e$, of length $a$, and let
+$D\subseteq\mathbb Z/a$ be the set of residues of lengths of words
+$w$ with $\tau_w=e$.  It is nonempty and closed under addition, so it
+is a subgroup.  If $w,w'$ both represent $g\in G$ and $v$ represents
+$g^{-1}$, then $wv$ and $w'v$ represent $e$, so $|w|-|w'|\in D$.
+Hence $g\mapsto|w|+D$ is a well-defined map
+$G\to(\mathbb Z/a)/D$, and it respects products because lengths add
+under concatenation.  Its target is abelian and $G$ is perfect, so
+it is trivial: every $g\in G$ has a word whose length lies in $D$
+modulo $a$.  Appending a word for $e$ of the opposite residue, and
+then copies of $w_e$, gives words of one common length $t$ for all
+elements of $G$.  Substituting these words for group elements
+reduces the word problem of $G$ to that of $S_p$, and so to
+predicting $p$.  The word problem of a non-solvable group is
+$\mathrm{NC}^1$-complete \cite{Barrington1989}.
+\end{proof}
+
+The hypothesis of (ii) is about words of equal length, and it cannot
+be weakened to ``$S_p$ is not aperiodic''.  In
+Example~\ref{ex:free-predictor}, $S_p$ is the two-element group, but
+$\tau(\Obs^t)$ is a single element for every $t$, and the process is
+predicted by a function of the input length alone.  The proof of
+(iii) shows that a non-solvable group never escapes this way.
+Table~\ref{tab:classes} summarises.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lll}
+\hline
+Condition on $S_p$ & Predicting $p$ & Source\\
+\hline
+aperiodic & in $\mathrm{AC}^0$ &
+  Thm.~\ref{thm:pred-complexity}(i)\\
+some $\tau(\Obs^t)$ contains a nontrivial group &
+  not in $\mathrm{AC}^0$ & Thm.~\ref{thm:pred-complexity}(ii)\\
+all subgroups solvable & in $\mathrm{ACC}^0$ &
+  Thm.~\ref{thm:pred-complexity}(i)\\
+contains a non-solvable group & $\mathrm{NC}^1$-complete &
+  Thm.~\ref{thm:pred-complexity}(iii)\\
+\hline
+\end{tabular}
+\caption{Complexity of exact next-symbol prediction, for finite
+$X_p$, by the algebraic class of the canonical monoid.}
+\label{tab:classes}
+\end{table}
+
+\begin{corollary}[Constant-depth transformers]
+\label{cor:transformers}
+Assume $X_p$ is finite and $S_p$ contains a non-solvable group.  If
+$\mathrm{TC}^0\ne\mathrm{NC}^1$, then no family of
+constant-depth transformers with logarithmic precision predicts $p$
+on all possible words of all lengths, nor comes within $\gamma/2$ of
+doing so.
+\end{corollary}
+
+\begin{proof}
+Such transformers compute only functions in $\mathrm{TC}^0$
+\cite{MerrillSabharwal2023}, and $\mathrm{TC}^0$ is closed under the
+reductions used above, so a predicting family would place an
+$\mathrm{NC}^1$-complete problem in $\mathrm{TC}^0$.
+\end{proof}
+
+In the other direction, Lemma~\ref{lem:syntactic}(iii) shows that
+$S_p$ is aperiodic exactly when every $M(K_x)$ is, since quotients
+and subdirect products of aperiodic monoids are aperiodic.  By
+Sch\"utzenberger's theorem \cite{Schutzenberger1965} that is the
+statement that every language $K_x$ of histories leading to a given
+state is star-free, and star-free languages are exactly those
+recognised in the masked hard-attention transformer model of
+\cite{YangChiangAngluin2024}.
+
+Three limits apply to Corollary~\ref{cor:transformers}.  It is
+asymptotic in the length: at any fixed length $T$, every finite-state
+update can be simulated by a transformer of depth $O(\log T)$, and
+of constant depth when all subgroups are solvable
+\cite{LiuEtAl2023}.  It is conditional on
+$\mathrm{TC}^0\ne\mathrm{NC}^1$.  And it is a worst-case statement
+over possible histories: a predictor that is accurate on most
+histories under $p$, but wrong on a set of small probability, is not
+covered, and we do not know what an average-case version should say.
+
+\section{How much must be remembered}
+\label{sec:rank}
+
+The invariants of Section~\ref{sec:syntactic} are global.  This
+section extracts a word by word one: for each word $w$, a lower bound on the number
+of distinctions any exact predictor must still be holding after reading
+$w$.
+
+\begin{definition}[Live rank]
+For $s\in S_p$, the live rank of $s$ is the number of live states in its
+image,
+\[
+  \rk(s)=\bigl|\,s(\widehat X_p)\cap X_p\,\bigr|
+  \in\{0,1,2,\ldots\}\cup\{\infty\}.
+\]
+\end{definition}
+
+Composition cannot increase live rank on either side.  For $s\circ t$,
+the image of the composite is contained in the image of $s$, so
+$\rk(s\circ t)\le\rk(s)$, and the image of $s\circ t$ is
+$s(\mathrm{im}\,t)$, whose live part is contained in the image under $s$
+of the live part of $\mathrm{im}\,t$ (since $s(\dagger)=\dagger$ is not
+live), so $\rk(s\circ t)\le\rk(t)$ as well.
+
+For a word $w$, the live states in the image of $\tau_w$ are exactly the
+predictive states $q_{uw}$ over histories $u$ with $p(uw)>0$.  So
+$\rk(\tau_w)$ counts the distinct conditional future laws that can hold
+immediately after an occurrence of $w$.
+
+\begin{theorem}[Inherited memory bound]
+\label{thm:rank-bound}
+Let $A$ be a reachable exact predictive agent for $p$.  For every word
+$w\in\Obs^*$,
+\[
+  \rk(\tau_w)\ \le\
+  \bigl|\,\delta_w(Q)\cap Q^+\,\bigr|.
+\]
+The right-hand side is the number of distinct live agent states
+reachable by a history ending in $w$.
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{thm:predictor-quotient},
+$L\circ\delta_w=\tau_w\circ L$ with $L$ surjective, so
+$\tau_w(\widehat X_p)=L(\delta_w(Q))$.  A live element of the left-hand
+side is the image under $L$ of some element of $\delta_w(Q)$, and that
+element must lie in $Q^+$ because $L(d)=\dagger$.  So $L$ maps
+$\delta_w(Q)\cap Q^+$ onto $\tau_w(\widehat X_p)\cap X_p$, giving the
+inequality.  For the interpretation: $Q=\{\delta_u(q_0):p(u)>0\}
+\mathbin{\dot\cup}\{d\}$ by reachability, so
+$\delta_w(Q)\cap Q^+=\{\delta_{uw}(q_0):p(uw)>0\}\cap Q^+$, the live
+states reachable by histories with final block $w$.
+\end{proof}
+
+The bound is determined by the process alone and holds word by word for
+every exact predictor, whatever its implementation.  Its two extremes
+have names and appear as the two poles of this paper's examples.
+
+\begin{example}[Total forgetting: the reset chain]
+Call $w$ synchronising when $\rk(\tau_w)=1$: after reading $w$, a single
+conditional future law holds, regardless of what came before, so an
+exact predictor is permitted to forget everything preceding $w$.  In the
+Markov chains of Proposition~\ref{prop:markov-reset-general} every
+single symbol is synchronising: $\rk(c_i)=1$ for each reset map, and
+only the identity has full live rank.  This is the precise content of
+calling the last-symbol predictor transparent.
+\end{example}
+
+\begin{example}[No forgetting: the P\'olya urn]
+\label{ex:polya}
+Let $\Obs=\{\mathsf r,\mathsf b\}$ and let $p$ be the P\'olya urn started
+from one red and one blue ball: each symbol is drawn with probability
+proportional to the current count of its colour, and the drawn colour's
+count then increases by one.  Explicitly, any word with $r$ reds and $b$
+blues has
+\[
+  p(w)=\frac{r!\,b!}{(r+b+1)!}>0,
+\]
+so the process has full support and the order of symbols does not
+matter.  The predictive state after a history is therefore a function of
+the pair $(r,b)$ alone.  Distinct pairs give distinct states, by two
+finite-future probabilities: with $n=r+b+2$,
+\[
+  q_{(r,b)}(\mathsf r)=\frac{r+1}{n},
+  \qquad
+  q_{(r,b)}(\mathsf r\mathsf r)=\frac{(r+1)(r+2)}{n(n+1)},
+\]
+and these two values determine first $n$ and then $r$.  One-step
+probabilities alone do not suffice: $(1,1)$ and $(2,2)$ both predict
+red with probability $\tfrac12$, but their two-step predictions
+differ, $\tfrac{3}{10}$ against $\tfrac27$.
+
+The updates act on states by
+$(r,b)\mapsto(r+1,b)$ and $(r,b)\mapsto(r,b+1)$, so every $\tau_w$ is
+injective (Figure~\ref{fig:urn}) and
+\[
+  \rk(\tau_w)=\infty
+  \qquad(w\in\Obs^*).
+\]
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[scale=1.05,>=Stealth]
+  \foreach \r in {0,1,2,3}
+    \foreach \b in {0,1,2,3}
+      \fill (\r,\b) circle (1.5pt);
+  \foreach \r in {0,1,2}
+    \foreach \b in {0,1,2,3}
+      \draw[->] (\r+0.14,\b) -- (\r+0.86,\b);
+  \foreach \r in {0,1,2,3}
+    \foreach \b in {0,1,2}
+      \draw[->] (\r,\b+0.14) -- (\r,\b+0.86);
+  \foreach \b in {0,1,2,3} \node at (3.55,\b) {$\cdots$};
+  \foreach \r in {0,1,2,3} \node at (\r,3.5) {$\vdots$};
+  \node[below left] at (0.05,-0.05) {\scriptsize$(0,0)$};
+  \node[below] at (0.5,-0.08) {\scriptsize$\mathsf r$};
+  \node[left]  at (-0.08,0.5) {\scriptsize$\mathsf b$};
+\end{tikzpicture}
+\caption{Predictive states of the urn.  Drawing red moves right,
+drawing blue moves up, no two arrows merge, so no word ever collapses
+two states.}
+\label{fig:urn}
+\end{figure}
+
+No word is synchronising, and by
+Theorem~\ref{thm:rank-bound} no exact predictor of this process can
+bound its number of states: it must hold unboundedly many distinctions
+forever.  Note that $X_p$ is infinite here, so the Hankel rank of
+Section~\ref{sec:linear} is infinite as well, nothing in this section
+assumed finiteness.
+\end{example}
+
+The reset chain and the urn are opposite answers to the same question.
+In one, the world licenses total forgetting at every step and the forced
+memory is a single symbol, in the other, the world licenses no merging
+at all and the forced memory grows without bound.  The quantity
+$\rk(\tau_w)$ interpolates between them word by word.\footnote{The sets $I_k=\{s\in S_p:\rk(s)\le k\}$ are two-sided ideals, so the rank profile also stratifies
+$S_p$ into Rees quotients, each again contributing an inherited
+interval via congruence correspondence, we do not pursue this here.}
+
+The rank profile also ties the memory bound to the subgroups of
+Section~\ref{sec:syntactic}.
+
+\begin{proposition}[Groups sit at a rank level]
+\label{prop:group-rank}
+Let $G\subseteq S_p$ be a subgroup with identity $e$, and let
+$I=e(\widehat X_p)\cap X_p$ be the live image of $e$.  Every $g\in G$
+has live image $I$, and restriction to $I$ is an injective
+homomorphism $G\to\mathrm{Sym}(I)$.  In particular $\rk(g)=\rk(e)$
+for all $g\in G$.
+\end{proposition}
+
+\begin{proof}
+For $g\in G$ with inverse $g^{-1}$ in $G$ we have $g=e\circ g$ and
+$e=g\circ g^{-1}$, so the images of $g$ and $e$ contain each other.
+The idempotent $e$ fixes its image pointwise.  So $g$ maps the image
+of $e$ into itself, and $g\circ g^{-1}=g^{-1}\circ g=e$ is the
+identity there, hence $g$ permutes the image of $e$.  It fixes
+$\dagger$, so it permutes $I$.  Restriction respects composition, and
+it is injective because $g=g\circ e$ is determined by its values on
+the image of $e$.
+\end{proof}
+
+Combined with Theorem~\ref{thm:rank-bound}: if $\tau_w$ lies in a
+subgroup $G$ of $S_p$, every exact predictor holds at least as many
+live states after $w$ as the smallest set on which $G$ acts
+faithfully.  A copy of $A_5$ in $S_p$ forces five, on every word
+whose update lies in it, and this half of the group constraint needs
+no finiteness of the predictor, unlike
+Theorem~\ref{thm:transport}.
+
+Synchronisation is a studied notion on both sides of this construction.
+For $\varepsilon$-machines, Travers and Crutchfield analyse when and
+how fast an observer of a stationary finite-state source pins down the
+predictive state, including a polynomial-time test for the existence of
+a synchronising word
+\cite{TraversCrutchfield2011a,TraversCrutchfield2011b}, for
+deterministic automata, reset words are the subject of a large
+literature around the \v{C}ern\'y conjecture \cite{Volkov2008}.  The
+contribution of this section is neither notion but the transport:
+Theorem~\ref{thm:rank-bound} carries the full rank profile, not only
+the synchronising case, to every exact predictor of the process, with
+no stationarity or finiteness hypothesis.
+
 
 \section{The finite-rank linear realisation}
 \label{sec:linear}
@@ -925,14 +1549,15 @@ is a homomorphism.  Injectivity is
 Proposition~\ref{prop:faithful}.
 \end{proof}
 
-\begin{corollary}[The interval reads only the second coordinate]
+\begin{corollary}[Invariants of $S_p$ read only the second coordinate]
 \label{cor:projection}
 Let $\pi:\mathcal N\rtimes S_p\to S_p$ be the projection.  Then
 $\alpha=\pi\circ\Lambda$, so $\kappa_{\mathrm{pred}}$ is the pullback of
 $\ker\pi$: two operators are $\kappa_{\mathrm{pred}}$-related exactly
 when their images under $\Lambda$ agree in the second coordinate.  Any
-invariant computed from $S_p$, including the congruence interval of
-Corollary~\ref{cor:con-inheritance}, is therefore blind to the
+invariant computed from $S_p$, including the groups of
+Section~\ref{sec:syntactic} and the congruence interval of
+Section~\ref{sec:congruence}, is therefore blind to the
 likelihood coordinate, the first component $\ell_T$ of $\Lambda(T)$,
 by construction.
 Section~\ref{subsec:computed-support} computes two processes where the
@@ -952,7 +1577,7 @@ single fibre: the opposite extreme.}
 Sections~\ref{sec:agent}, \ref{sec:support}, and this one now assemble
 into a tower, drawn in Figure~\ref{fig:tower}.  A process forces structure at three
 separable levels, what is possible, what is conditionally expected,
-and how likely each transition is, and the congruence interval reads
+and how likely each transition is, and every invariant of $S_p$ reads
 exactly the middle level (Corollary~\ref{cor:projection}), nothing here
 decomposes $S_p$ itself in the cascade sense \cite{DrosteEtAl2011}.
 
@@ -968,18 +1593,85 @@ S_p \arrow[d, two heads, "\sigma"] \\
 \end{tikzcd}
 \caption{The tower.  Hooked arrows are embeddings, double-headed
 arrows are surjections, and $\alpha=\pi\circ\Lambda$.  Every exact
-predictor $S_A$ reads its inherited intervals off the right-hand
-column, nested as
-$\Con(S_{\mathrm{supp}})\subseteq\Con(S_p)\subseteq\Con(S_A)$, and
-the congruence invariant sees only the middle object.}
+predictor $S_A$ has the right-hand column as forced quotients, and
+the invariants of Sections~\ref{sec:syntactic} and~\ref{sec:congruence}
+see only the middle object.}
 \label{fig:tower}
 \end{figure}
 
 
-\section{The reset chain: all three layers in closed form}
+\section{Why the congruence lattice is the wrong invariant}
+\label{sec:congruence}
+
+The first invariant one would try to transport along
+$\Phi:S_A\to S_p$ is the lattice of congruences, the admissible
+lumpings of the update dynamics.  It does transport, as an interval.
+This section records that result and then shows that it is too weak
+to carry the reading one would like: the interval is non-distributive
+already for processes whose exact predictor stores one symbol, on
+which every invariant of Section~\ref{sec:syntactic} is trivial.
+
+\subsection{The inherited interval}
+
+A congruence on a monoid $S$ is an equivalence relation
+$\sim$ compatible with multiplication on both sides: $s\sim t$ implies
+$asb\sim atb$ for all $a,b\in S$.  Compatibility is what makes
+congruences the admissible lumpings of dynamics: it says that
+substituting indistinguishable transformations into any past and future
+dynamical context cannot make them distinguishable, so once
+admissibility is defined as a lumping of transition operators, the
+admissible hierarchy is exactly $\Con(S)$.\footnote{This is a
+conditional statement: it does not make every algebraic congruence
+meaningful for a particular agent's dynamics.}  This concerns
+transformations, not predictive states, coarse graining states is a
+different construction.
+
+$\Con(S)$ denotes the set of all congruences on $S$, ordered by
+refinement, the intersection of two congruences is a congruence, and any
+family of congruences has a coarsest common refinement, so $\Con(S)$ is a
+lattice, with bottom the equality relation and top the relation merging
+everything.  The interval $[\kappa,\top]$ consists of the congruences at
+least as coarse as $\kappa$, and the correspondence theorem says these are
+in order-preserving bijection with the congruences of the quotient
+$S/\kappa$.  Finally, $M_3$ and $N_5$ are the two five-element lattices shown in
+Figure~\ref{fig:m3n5}, whose presence as a sublattice is equivalent to
+the failure of distributivity (Section~\ref{sec:coordinates}).
+
+\begin{corollary}[Inherited intervals]
+\label{cor:con-inheritance}
+Let $A$ be a reachable exact predictive agent for $p$, with
+$\kappa=\ker\Phi$ and $\kappa'\supseteq\kappa$ the kernel of the
+composite $S_A\to S_p\to S_{\mathrm{supp}}$
+(Corollaries~\ref{cor:quotient} and~\ref{cor:support-tower}).  Then
+\[
+  \Con(S_{\mathrm{supp}})
+  \cong[\kappa',\top]
+  \;\subseteq\;
+  [\kappa,\top]
+  \cong\Con(S_p)
+  \;\subseteq\;
+  \Con(S_A).
+\]
+In particular, if $\Con(S_p)$ is non-distributive then so is
+$\Con(S_A)$: every $M_3$ or $N_5$ sublattice of $\Con(S_p)$ occurs
+inside the interval $[\kappa,\top]$, since an interval is closed under
+meets and joins.
+\end{corollary}
+
+\begin{proof}
+The congruence correspondence theorem \cite{Howie1995}, applied to
+the surjections $S_A\to S_p$ and $S_A\to S_{\mathrm{supp}}$.
+\end{proof}
+
+Different exact predictors may add implementation distinctions below
+$\kappa$, but cannot remove the predictive interval above it.  We
+call the non-distributive configurations the interval can carry
+\emph{obstructions}.
+
+\subsection{The reset chain: all three layers in closed form}
 \label{sec:reset}
 
-This section computes every layer of the tower for the simplest
+This subsection computes every layer of the tower for the simplest
 nontrivial family of processes: full support first order Markov
 chains. The possibility layer is
 trivial (Remark~\ref{rem:full-support}), the update skeleton is a small
@@ -1163,7 +1855,7 @@ conclusions:
 \end{enumerate}
 
 
-\section{What distributivity does say}
+\subsection{What distributivity does say}
 \label{sec:coordinates}
 
 In a finite
@@ -1244,492 +1936,118 @@ $a\,\alpha\,b\,\beta\,c$ for some $b$
 applied in this paper only to explicitly finite monoids or explicitly
 finite quotient intervals.
 
-\section{How much must be remembered}
-\label{sec:rank}
+\subsection{Where the witnesses live}
+\label{subsec:witnesses}
 
-The congruence interval is a single global invariant.  This section
-extracts a word by word one: for each word $w$, a lower bound on the number
-of distinctions any exact predictor must still be holding after reading
-$w$.
+The computed examples of Section~\ref{subsec:computed-support} carry
+witnesses too.  For Z1R, $|\Con(S_p)|=8$ with exactly one $M_3$
+sublattice, and for RRXOR, $|\Con(S_p)|=29$, again with exactly one
+$M_3$.  Since $\kappa_{\mathrm{supp}}=\bot$ in both, every congruence
+of $S_p$, the $M_3$ witness included, is an invariant of the support
+language $L_p$ alone: any process with the same impossibility pattern
+carries the same witness in its possibility interval.  The reset
+chains are the opposite pole.  There $\kappa_{\mathrm{supp}}=\top$,
+and the $M_3$ contains $\kappa_{\mathrm{supp}}$ in none of its five
+elements except the top, so that witness is built entirely from
+probabilities.  Because $\kappa_{\mathrm{supp}}$ is trivial in Z1R and
+RRXOR, these examples do not test whether a witness built from
+impossibility always descends to the possibility interval.
+Example~\ref{ex:one-zero} lies in the regime where the question is
+open, and we have not computed its congruence lattices.
 
-\begin{definition}[Live rank]
-For $s\in S_p$, the live rank of $s$ is the number of live states in its
-image,
-\[
-  \rk(s)=\bigl|\,s(\widehat X_p)\cap X_p\,\bigr|
-  \in\{0,1,2,\ldots\}\cup\{\infty\}.
-\]
-\end{definition}
+So the inherited interval is real, forced, and uninformative in the
+sense that matters here.  It is non-distributive for every first
+order Markov chain on three or more symbols, where the invariants of
+Section~\ref{sec:syntactic} correctly report that nothing needs to be
+composed: $R_n^1$ is aperiodic, has no nontrivial subgroup and group
+complexity zero, and every generator has live rank one.
 
-Composition cannot increase live rank on either side.  For $s\circ t$,
-the image of the composite is contained in the image of $s$, so
-$\rk(s\circ t)\le\rk(s)$, and the image of $s\circ t$ is
-$s(\mathrm{im}\,t)$, whose live part is contained in the image under $s$
-of the live part of $\mathrm{im}\,t$ (since $s(\dagger)=\dagger$ is not
-live), so $\rk(s\circ t)\le\rk(t)$ as well.
-
-For a word $w$, the live states in the image of $\tau_w$ are exactly the
-predictive states $q_{uw}$ over histories $u$ with $p(uw)>0$.  So
-$\rk(\tau_w)$ counts the distinct conditional future laws that can hold
-immediately after an occurrence of $w$.
-
-\begin{theorem}[Inherited memory bound]
-\label{thm:rank-bound}
-Let $A$ be a reachable exact predictive agent for $p$.  For every word
-$w\in\Obs^*$,
-\[
-  \rk(\tau_w)\ \le\
-  \bigl|\,\delta_w(Q)\cap Q^+\,\bigr|.
-\]
-The right-hand side is the number of distinct live agent states
-reachable by a history ending in $w$.
-\end{theorem}
-
-\begin{proof}
-By Theorem~\ref{thm:predictor-quotient},
-$L\circ\delta_w=\tau_w\circ L$ with $L$ surjective, so
-$\tau_w(\widehat X_p)=L(\delta_w(Q))$.  A live element of the left-hand
-side is the image under $L$ of some element of $\delta_w(Q)$, and that
-element must lie in $Q^+$ because $L(d)=\dagger$.  So $L$ maps
-$\delta_w(Q)\cap Q^+$ onto $\tau_w(\widehat X_p)\cap X_p$, giving the
-inequality.  For the interpretation: $Q=\{\delta_u(q_0):p(u)>0\}
-\mathbin{\dot\cup}\{d\}$ by reachability, so
-$\delta_w(Q)\cap Q^+=\{\delta_{uw}(q_0):p(uw)>0\}\cap Q^+$, the live
-states reachable by histories with final block $w$.
-\end{proof}
-
-The bound is determined by the process alone and holds word by word for
-every exact predictor, whatever its implementation.  Its two extremes
-have names and appear as the two poles of this paper's examples.
-
-\begin{example}[Total forgetting: the reset chain]
-Call $w$ synchronising when $\rk(\tau_w)=1$: after reading $w$, a single
-conditional future law holds, regardless of what came before, so an
-exact predictor is permitted to forget everything preceding $w$.  In the
-Markov chains of Proposition~\ref{prop:markov-reset-general} every
-single symbol is synchronising: $\rk(c_i)=1$ for each reset map, and
-only the identity has full live rank.  This is the precise content of
-calling the last-symbol predictor transparent.
-\end{example}
-
-\begin{example}[No forgetting: the P\'olya urn]
-\label{ex:polya}
-Let $\Obs=\{\mathsf r,\mathsf b\}$ and let $p$ be the P\'olya urn started
-from one red and one blue ball: each symbol is drawn with probability
-proportional to the current count of its colour, and the drawn colour's
-count then increases by one.  Explicitly, any word with $r$ reds and $b$
-blues has
-\[
-  p(w)=\frac{r!\,b!}{(r+b+1)!}>0,
-\]
-so the process has full support and the order of symbols does not
-matter.  The predictive state after a history is therefore a function of
-the pair $(r,b)$ alone.  Distinct pairs give distinct states, by two
-finite-future probabilities: with $n=r+b+2$,
-\[
-  q_{(r,b)}(\mathsf r)=\frac{r+1}{n},
-  \qquad
-  q_{(r,b)}(\mathsf r\mathsf r)=\frac{(r+1)(r+2)}{n(n+1)},
-\]
-and these two values determine first $n$ and then $r$.  One-step
-probabilities alone do not suffice: $(1,1)$ and $(2,2)$ both predict
-red with probability $\tfrac12$, but their two-step predictions
-differ, $\tfrac{3}{10}$ against $\tfrac27$.
-
-The updates act on states by
-$(r,b)\mapsto(r+1,b)$ and $(r,b)\mapsto(r,b+1)$, so every $\tau_w$ is
-injective (Figure~\ref{fig:urn}) and
-\[
-  \rk(\tau_w)=\infty
-  \qquad(w\in\Obs^*).
-\]
-\begin{figure}[ht]
-\centering
-\begin{tikzpicture}[scale=1.05,>=Stealth]
-  \foreach \r in {0,1,2,3}
-    \foreach \b in {0,1,2,3}
-      \fill (\r,\b) circle (1.5pt);
-  \foreach \r in {0,1,2}
-    \foreach \b in {0,1,2,3}
-      \draw[->] (\r+0.14,\b) -- (\r+0.86,\b);
-  \foreach \r in {0,1,2,3}
-    \foreach \b in {0,1,2}
-      \draw[->] (\r,\b+0.14) -- (\r,\b+0.86);
-  \foreach \b in {0,1,2,3} \node at (3.55,\b) {$\cdots$};
-  \foreach \r in {0,1,2,3} \node at (\r,3.5) {$\vdots$};
-  \node[below left] at (0.05,-0.05) {\scriptsize$(0,0)$};
-  \node[below] at (0.5,-0.08) {\scriptsize$\mathsf r$};
-  \node[left]  at (-0.08,0.5) {\scriptsize$\mathsf b$};
-\end{tikzpicture}
-\caption{Predictive states of the urn.  Drawing red moves right,
-drawing blue moves up, no two arrows merge, so no word ever collapses
-two states.}
-\label{fig:urn}
-\end{figure}
-
-No word is synchronising, and by
-Theorem~\ref{thm:rank-bound} no exact predictor of this process can
-bound its number of states: it must hold unboundedly many distinctions
-forever.  Note that $X_p$ is infinite here, so the Hankel rank of
-Section~\ref{sec:linear} is infinite as well, nothing in this section
-assumed finiteness.
-\end{example}
-
-The reset chain and the urn are opposite answers to the same question.
-In one, the world licenses total forgetting at every step and the forced
-memory is a single symbol, in the other, the world licenses no merging
-at all and the forced memory grows without bound.  The quantity
-$\rk(\tau_w)$ interpolates between them word by word.\footnote{The sets $I_k=\{s\in S_p:\rk(s)\le k\}$ are two-sided ideals, so the rank profile also stratifies
-$S_p$ into Rees quotients, each again contributing an inherited
-interval via congruence correspondence, we do not pursue this here.}
-
-Synchronisation is a studied notion on both sides of this construction.
-For $\varepsilon$-machines, Travers and Crutchfield analyse when and
-how fast an observer of a stationary finite-state source pins down the
-predictive state, including a polynomial-time test for the existence of
-a synchronising word
-\cite{TraversCrutchfield2011a,TraversCrutchfield2011b}, for
-deterministic automata, reset words are the subject of a large
-literature around the \v{C}ern\'y conjecture \cite{Volkov2008}.  The
-contribution of this section is neither notion but the transport:
-Theorem~\ref{thm:rank-bound} carries the full rank profile, not only
-the synchronising case, to every exact predictor of the process, with
-no stationarity or finiteness hypothesis.
-
-
-\section{The controlled setting}
+\section{Control}
 \label{sec:controllers}
 
-Actions require a controlled version of the predictive machine.  Fix finite
-action and output alphabets $A$ and $O$.  An anticipation-free interface
-$\mathcal I$ (anticipation-free: outputs up to time $n$ depend only on
-actions up to time $n$, which is what the display below enforces)
-specifies probabilities
-\[
-  \mathcal I(o_{1:n}\mid a_{1:n})
-\]
-which are normalised and causally prefix consistent:
-\[
-  \mathcal I(\eps\mid\eps)=1,
-  \qquad
-  \sum_{o_n\in O}\mathcal I(o_{1:n}\mid a_{1:n})
-  =\mathcal I(o_{1:n-1}\mid a_{1:n-1})
-  \quad(n\ge1).
-\]
-A history
-\[
-  h=(a_1,o_1)\cdots(a_n,o_n)
-\]
-is admissible when $\mathcal I(o_{1:n}\mid a_{1:n})>0$.  Its residual
-interface is
-\[
-  \mathcal I^h(v\mid u)
-  =
-  \frac{\mathcal I(o_{1:n}v\mid a_{1:n}u)}
-       {\mathcal I(o_{1:n}\mid a_{1:n})},
-\]
-for equally long future action and output words $u$ and $v$.  Define
-\[
-  X_{\mathcal I}=\{\mathcal I^h:h\text{ admissible}\},
-  \qquad
-  \widehat X_{\mathcal I}
-  =X_{\mathcal I}\mathbin{\dot\cup}\{\dagger\}.
-\]
-Appending an action-output pair gives the total canonical update
-\[
-  \tau_{a,o}(\mathcal I^h)=
-  \begin{cases}
-    \mathcal I^{h(a,o)},&\mathcal I^h(o\mid a)>0,\\
-    \dagger,&\mathcal I^h(o\mid a)=0,
-  \end{cases}
-  \qquad
-  \tau_{a,o}(\dagger)=\dagger.
-\]
-The map is well-defined: if $\mathcal I^h=\mathcal I^{h'}$, then
-$\mathcal I^h(o\mid a)=\mathcal I^{h'}(o\mid a)$, and whenever this probability
-is positive the updated residuals $\mathcal I^{h(a,o)}$ and
-$\mathcal I^{h'(a,o)}$ coincide.  The controlled predictive transition monoid is
-\[
-  S_{\mathcal I}=\langle\tau_{a,o}:(a,o)\in A\times O\rangle.
-\]
-This is the $\varepsilon$-transducer construction for controlled processes
-\cite{BarnettCrutchfield2015}.
+Everything above concerns prediction.  With actions, the alphabet
+becomes $A\times O$ and the process becomes an interface
+$\mathcal I(o_{1:n}\mid a_{1:n})$ whose outputs up to time $n$ depend
+only on actions up to time $n$.  Its residuals after admissible
+histories form a canonical machine $\widehat X_{\mathcal I}$ with
+updates $\tau_{a,o}$ and monoid $S_{\mathcal I}$, the
+$\varepsilon$-transducer construction \cite{BarnettCrutchfield2015}.
+Lemma~\ref{lem:descent} and the absorbing dead state are all that
+Sections~\ref{sec:agent}, \ref{sec:support}, \ref{sec:syntactic}
+and~\ref{sec:rank} used, so each of their results holds verbatim for
+any system with state set $Q$ and updates $\delta_{a,o}$ that admits
+a surjection $L:Q\to\widehat X_{\mathcal I}$ with
+$L\circ\delta_{a,o}=\tau_{a,o}\circ L$.
 
-\begin{remark}[Relation to partially observable cMDPs]
-Every partially observable cMDP together with a fixed initial law induces an
-anticipation-free interface, by letting $\mathcal I(o_{1:n}\mid a_{1:n})$ be the
-probability of the output word under the action word.  Many latent models induce
-the same interface, and $X_{\mathcal I}$ is a quotient of the belief simplex:
-belief determines the residual interface but not conversely.  The monoid and
-congruence conclusions below depend only on $\mathcal I$, so they are invariant
-under change of latent realisation and apply equally to interfaces admitting no
-finite POMDP realisation.  Conversely, recovering the latent kernel $P$ alone
-does not determine $\mathcal I$ without the observation kernel and initial law.
+\begin{remark}[What a controller would need]
+\label{rem:controllers}
+For a predictor, exactness supplies the map $L$.  For a controller,
+optimality does not.  If the only goal is the set of all streams,
+every controller is optimal in every environment, including one with
+a single live state, which cannot surject onto two predictive
+states.  Richens et al.\ prove more: a policy optimal for every
+depth-one goal identifies no nontrivial bound on the transition
+probabilities \cite{Richens2025}.  Near-optimality across a
+sufficiently deep family of goals does determine the environment
+from the policy \cite{Richens2025,Cifuentes2026}, but that recovery
+reads the policy as a whole, not the controller's recurrent state.
+The map $L$ exists when recovery is state-local, meaning that the
+residual interface after a history is a function of the controller
+state reached by that history, through the continuation policy from
+that state.  Whether behavioural recovery yields state-locality in a
+suitable exact limit is open, and we do not pursue it.  Under that
+hypothesis a controller inherits the quotient onto $S_{\mathcal I}$,
+and with it the transport and memory results of this paper.
 \end{remark}
-
-A goal is a measurable set of action--output streams.  A controller $C$ together
-with $\mathcal I$ and a goal $g$ induces a distribution over streams, write
-$\Pr(g\mid C,\mathcal I)$ for the resulting achievement probability.  For
-$0\le\delta<1$, $C$ is $\delta$-optimal on a goal set $\mathcal G$ when
-\[
-  \Pr(g\mid C,\mathcal I)\ \ge\ (1-\delta)\,\sup_{C'}\Pr(g\mid C',\mathcal I)
-  \qquad(g\in\mathcal G),
-\]
-matching the relative-failure criterion of \cite{Richens2025,Cifuentes2026}.
-
-\subsection{Two meanings of `the controller contains a model'}
-
-\begin{enumerate}[label=(\roman*)]
-  \item Behavioural containment: the environment's transition law or
-        residual interface can be recovered from the controller's policy.
-  \item Internal quotient: there is a surjective map from
-        reachable controller states to $X_{\mathcal I}$ which commutes with
-        every action-output update.
-\end{enumerate}
-The second statement implies a quotient of transition monoids.  The first is
-an identifiability statement about behaviour and does not on its own locate a
-model in the controller's activations or recurrent state.  For behavioural
-containment, the recovery map must be fixed uniformly over a class of
-environments sharing the same action and output alphabets and the same goal
-set, allowing it to depend on the unknown environment would make the claim
-vacuous.
-
-\subsection{Why optimality alone is insufficient}
-\label{subsec:controller-no-go}
-
-The proof uses the controller conventions of
-Subsection~\ref{subsec:controller-formalism}.
-
-\begin{proposition}
-\label{prop:controller-no-go}
-Optimality on a fixed goal set does not force either form of
-containment.
-\end{proposition}
-
-\begin{proof}
-Take $\mathcal G=\{g\}$ with $g$ the set of all streams: every controller
-achieves $g$ with probability one, so every controller is $0$-optimal in every
-environment.  In particular, take an interface with at least two distinct
-predictive states and a controller with one live state (and the dead state)
-which chooses one fixed action after every history.  A dead-state-preserving
-map from this controller cannot surject onto two or more live predictive
-states, and the same constant policy is optimal for a family of environments
-with common action and output alphabets but different transition laws.  No
-recovery map fixed across that family can recover the environment from
-the policy.
-\end{proof}
-
-The example is not an artefact of a trivial goal.  Let $g$ instead be
-``eventually take action $a$'', which is achievable and non-constant.  Its
-unique optimal policy takes $a$ immediately, is memoryless, and is identical
-across every interface on the same alphabets, so neither containment follows.
-Richens et al.\ prove a stronger negative result: even a policy optimal
-for every depth-one goal identifies no nontrivial bound on the
-transition probabilities \cite{Richens2025}, a fortiori the same holds
-under partial observation.
-
-\subsection{Behavioural recovery}
-
-What optimality on a single goal cannot do, near-optimality across a
-sufficiently deep goal family can.  Richens et al.\ show, for finite, communicating (every state reachable
-from every other), fully observed controlled Markov processes with deterministic
-goal-conditioned policies, that $\delta$-optimality on all goals of depth at
-most $n$ determines an estimate of the transition kernel whose entrywise
-error vanishes as $n$ grows, for any fixed $\delta<1$ \cite{Richens2025}.
-Cifuentes extends this behavioural recovery to stochastic policies and to
-observation-based policies in partially observable cMDPs, and separately
-reduces the goal family to width two for deterministic policies at a
-constant-factor cost in depth, the stochastic argument requires
-$\delta<\tfrac12$ because its recovery goals are two-alternative bets,
-and a
-$\tfrac12$-optimal agent may split both branches evenly and reveal nothing,
-the width-two argument also assumes $\delta<\tfrac12$, but there only as
-a proof simplification
-\cite{Cifuentes2026}.  In every case the recovery map is from the policy, not
-from the policy's implementation, so a further bridge is needed for an
-internal quotient.
-
-There is also a scope restriction to keep in view.  In the partially
-observable extension, goals are still formulated and evaluated on latent
-environment states, even though the policy observes only outputs, the proof
-works because the querying policy ignores observations, so the observation
-kernel drops out of the calculation.  Observation-phrased goals are left open
-in \cite{Cifuentes2026}.  The interface formalism above removes both
-restrictions, which is exactly the gap between that setting and the one used
-here.
-
-\subsection{The conditional internal quotient}
-\label{subsec:controller-formalism}
-
-The bridge below is conditional on a state-local hypothesis.  Whether
-Richens--Cifuentes behavioural recovery yields that hypothesis in a suitable
-exact limit is open, until it is settled,
-Theorem~\ref{thm:controller-bridge} and Corollary~\ref{cor:controller-con}
-should be read as conditional results.
-
-Fix a goal set $\mathcal G$.  A recurrent goal-conditioned controller
-(recurrent meaning it carries an internal state updated at every step, not
-recurrence in the Markov-chain sense)
-\[
-  C=(Q,q_0,d,\{\delta_{a,o}\}_{(a,o)\in A\times O},\pi)
-\]
-has the same components as the predictive agents of
-Section~\ref{sec:agent}, with the alphabet $A\times O$ in place of $\Obs$ and
-one addition: a deterministic goal-conditioned policy
-$\pi:Q\times\mathcal G\to A$.  For a history
-$h=(a_1,o_1)\cdots(a_n,o_n)$, write
-\[
-  \delta_h
-  =\delta_{a_n,o_n}\circ\cdots\circ\delta_{a_1,o_1},
-  \qquad q_h=\delta_h(q_0),
-\]
-with $Q^+=\{q_h:h\text{ admissible}\}$ and
-$Q=Q^+\mathbin{\dot\cup}\{d\}$.
-
-The update maps are goal-independent and total, satisfy
-$\delta_{a,o}(d)=d$, and send $q_h$ to $d$ whenever $h(a,o)$ is
-impossible.  They are defined for every counterfactual intervention history,
-not only histories generated by the controller's on-policy actions.  If goal
-progress affects recurrence, that memory must be included explicitly in $Q$.
-
-For $q\in Q$, define its total continuation-policy signature by
-\[
-  B_C(q)(g,k)=\pi(\delta_k(q),g),
-  \qquad
-  g\in\mathcal G,\quad k\in(A\times O)^*.
-\]
-Using all counterfactual continuations, including those sent to $d$, makes
-$B_C(q)$ a function of the controller state alone rather than of the history
-chosen to represent it.
-
-\begin{definition}[State-local behavioural recovery]
-A recovery map $\mathcal R$ is state-local when it is fixed uniformly
-over the environment class under consideration and, for every admissible
-history $h$,
-\[
-  \mathcal R(B_C(q_h))=\mathcal I^h.
-\]
-\end{definition}
-
-This condition says that the policy information available from the recurrent
-state determines the residual controlled process.  It is stronger than global
-recovery from a policy oracle, because it requires the recoverable information
-to factor through the controller state.
-
-\begin{theorem}
-\label{thm:controller-bridge}
-Suppose a reachable recurrent goal-conditioned controller admits an exact
-state-local recovery map.  Then there is a surjection
-\[
-  L:Q\rightarrow\widehat X_{\mathcal I}
-\]
-satisfying
-\[
-  L\circ\delta_{a,o}=\tau_{a,o}\circ L
-  \qquad((a,o)\in A\times O).
-\]
-\end{theorem}
-
-\begin{proof}
-For a state reached by an admissible history $h$, define
-\[
-  L(q_h)=\mathcal R(B_C(q_h))=\mathcal I^h,
-\]
-and send the controller's dead state to the predictive dead state.  This is
-well-defined because equal controller states have the same complete
-continuation-policy signature and hence the same recovered residual interface.
-It is surjective because every element of $X_{\mathcal I}$ has an admissible
-history representative, while the controller dead state is sent to
-$\dagger$.
-
-If $h(a,o)$ is admissible, state-local recovery at the successor gives
-\[
-  L(\delta_{a,o}q_h)
-  =\mathcal I^{h(a,o)}
-  =\tau_{a,o}(\mathcal I^h)
-  =\tau_{a,o}L(q_h).
-\]
-For an impossible extension, both sides are the absorbing dead state.
-At $d$ the equation holds because both $d$ and $\dagger$ are absorbing.
-\end{proof}
-
-\begin{corollary}
-\label{cor:controller-con}
-Under the hypotheses of Theorem~\ref{thm:controller-bridge},
-Lemma~\ref{lem:descent} applied to $L$ gives a surjective monoid
-homomorphism $\Phi_C:S_C\rightarrow S_{\mathcal I}$, where
-$S_C=\langle\delta_{a,o}:(a,o)\in A\times O\rangle$, and, with
-$\kappa_C=\ker\Phi_C$,
-\[
-  \Con(S_{\mathcal I})
-  \cong[\kappa_C,\top]
-  \subseteq\Con(S_C).
-\]
-Thus every $M_3$ or $N_5$ obstruction in the canonical controlled predictive
-monoid is inherited by the recurrent controller.
-\end{corollary}
-
-\begin{remark}[The tower and the rank profile transport]
-\label{rem:controlled-transport}
-Everything in Sections~\ref{sec:support} and~\ref{sec:rank} used only
-Lemma~\ref{lem:descent} and the absorbing-$\dagger$ conventions, so it
-applies verbatim over the alphabet $A\times O$.  The controlled process has
-its own possibility layer, built from the follower sets of admissible
-action--output histories, and its own live rank and ideal chain on
-$S_{\mathcal I}$.  Under the hypothesis of
-Theorem~\ref{thm:controller-bridge}, a controller therefore inherits the
-same nested intervals and the same word by word memory bounds as an exact
-predictor.  We make no claim about the likelihood layer here: that would
-require a controlled linear realisation, which we have not set up.
-\end{remark}
-
-The hypotheses above are deliberately exact, and two open problems remain.
-First, state-locality: whether the exact limit of behavioural recovery
-factors through a recurrent controller state, rather than through the policy
-as a whole.  Second, robustness: the published results bound the error of a
-recovered kernel, which is behavioural approximation, monoid descent would
-instead need approximate intertwining, a bound of the form
-$L\circ\delta_{a,o}\approx\tau_{a,o}\circ L$ on residual interfaces, and the
-first does not yield the second, in part because a bound on the latent
-kernel $P$ leaves the observation kernel and initial law unrecovered.
-Supplying approximate intertwining, and with it the persistence of finite
-$M_3/N_5$ witnesses under controlled approximation, remains open.
-
 
 \section{Results and limitations}
 \label{sec:results}
 
-The theorem chain is short: conditional future laws form a canonical
-machine, every reachable exact predictor surjects onto it, descent
-turns that surjection into an inherited congruence interval, the same
-mechanism yields the outer possibility interval and, in the linear
-case, the likelihood extension whose projection the interval reads,
-and the rank profile bounds forced memory word by word.  The reset
-chains and the computed examples bracket where the inherited structure
-can live: entirely in the likelihoods, or entirely in bare
-possibility.
+The theorem chain is short.  Conditional future laws form a canonical
+machine, every reachable exact predictor surjects onto it, and
+descent makes the canonical monoid $S_p$ a quotient of the
+predictor's update monoid.  That monoid is the syntactic monoid of
+the state labelling.  For finite predictors its subgroups, its
+aperiodicity and its group complexity are forced, with the bounds
+attained.  For predictors with no recurrent state the same algebra
+fixes the circuit class of exact prediction.  The rank profile bounds
+forced memory word by word, and subgroups sit at rank levels that
+bound them.  Around $S_p$ sit a possibility quotient and a likelihood
+extension that none of these invariants see, and the reset chains and
+the computed examples bracket where a process's structure can live:
+entirely in the likelihoods, or entirely in bare possibility.  The
+congruence lattice is inherited too, and is uninformative.
 
-Three limits should be read alongside.  First, nothing here locates
-features in a network's activations: the results constrain quotients
-of update dynamics, not representations.  Second, exactness is a
-strong hypothesis, the approximate version, approximate
-intertwining and the persistence of finite witnesses, is open, and
-the controller results are conditional on state-locality
-(Section~\ref{sec:controllers}).  Third, the individual layers are
-close to known territory, causal states, follower-set automata,
-synchronisation theory, the projective/likelihood split, and the
-claims made here are the transport of that structure to arbitrary
-exact predictors and the stratification itself, not the layer objects.
+Four limits should be read alongside.  First, nothing here locates
+features in a network's activations: the results constrain update
+dynamics and the functions computed, not representations.  Whether a
+trained network encodes a stretch of input by its element of $S_p$,
+or only by its effect on the current state, is an empirical question.
+Second, the transport theorem needs a finite update monoid
+(Example~\ref{ex:free-predictor}), and the statement for predictors
+without one is conditional on $\mathrm{TC}^0\ne\mathrm{NC}^1$ and
+asymptotic in the length.  Third, accuracy must be uniform over
+possible histories (Remark~\ref{rem:uniform}).  Fourth, the
+individual objects are close to known territory, causal states,
+follower-set automata, syntactic monoids, synchronisation theory, the
+projective/likelihood split, and the claims made here are the
+passage from a process to its monoid and the transport of that
+structure to arbitrary exact predictors, not the objects themselves.
 
-Three problems are left open.  Whether an impossibility-built witness
-always descends to the possibility layer, testable only in the regime
-$\bot\subsetneq\kappa_{\mathrm{supp}}\subsetneq\top$
-(Section~\ref{subsec:computed-support}).  A criterion separating
-obstructions that block genuine decompositions of the monoid itself
-from those that are counting artefacts, congruence permutability is
-the natural candidate (Section~\ref{sec:coordinates}).  And, for controllers,
-state-locality and approximate intertwining
-(Section~\ref{sec:controllers}).
+Four problems are left open.  An average-case version: for a
+finite-state process whose observer synchronises asymptotically
+\cite{TraversCrutchfield2011b}, a predictor reading a bounded window
+can be accurate on most histories without composing anything, so we
+expect that the algebra is not forced on such predictors as stated,
+and we do not know the right weakening.  Whether an impossibility-built congruence
+witness always descends to the possibility layer, testable in the
+regime $\bot\subsetneq\kappa_{\mathrm{supp}}\subsetneq\top$ of
+Example~\ref{ex:one-zero} (Section~\ref{subsec:witnesses}).  A
+criterion separating congruence obstructions that block genuine
+decompositions of the monoid from those that are counting artefacts,
+congruence permutability is the natural candidate
+(Section~\ref{sec:coordinates}).  And, for controllers,
+state-locality (Section~\ref{sec:controllers}).
 
 \section*{Acknowledgements}
 This paper was written during a Fellowship with Dovetail Research,
@@ -1827,6 +2145,69 @@ Journal of Statistical Physics 183, 32 (2021).  arXiv:2008.12886.
 J.~M.~Howie,
 \emph{Fundamentals of Semigroup Theory.}
 Oxford University Press, 1995.
+
+\bibitem{Pin1986}
+J.-E.~Pin,
+\emph{Varieties of Formal Languages.}
+North Oxford Academic, 1986.
+
+\bibitem{KrohnRhodes1965}
+K.~Krohn and J.~Rhodes,
+\emph{Algebraic theory of machines. I. Prime decomposition theorem
+for finite semigroups and machines.}
+Transactions of the American Mathematical Society 116 (1965),
+450--464.
+
+\bibitem{RhodesSteinberg2009}
+J.~Rhodes and B.~Steinberg,
+\emph{The $\mathfrak q$-theory of Finite Semigroups.}
+Springer, 2009.
+
+\bibitem{Schutzenberger1965}
+M.~P.~Sch\"utzenberger,
+\emph{On finite monoids having only trivial subgroups.}
+Information and Control 8 (1965), 190--194.
+
+\bibitem{BarringtonTherien1988}
+D.~A.~M.~Barrington and D.~Th\'erien,
+\emph{Finite monoids and the fine structure of $\mathrm{NC}^1$.}
+Journal of the ACM 35 (1988), 941--952.
+
+\bibitem{Barrington1989}
+D.~A.~M.~Barrington,
+\emph{Bounded-width polynomial-size branching programs recognize
+exactly those languages in $\mathrm{NC}^1$.}
+Journal of Computer and System Sciences 38 (1989), 150--164.
+
+\bibitem{BarringtonEtAl1992}
+D.~A.~M.~Barrington, K.~Compton, H.~Straubing, and D.~Th\'erien,
+\emph{Regular languages in $\mathrm{NC}^1$.}
+Journal of Computer and System Sciences 44 (1992), 478--499.
+
+\bibitem{Smolensky1987}
+R.~Smolensky,
+\emph{Algebraic methods in the theory of lower bounds for Boolean
+circuit complexity.}
+Proceedings of the 19th ACM Symposium on Theory of Computing (1987),
+77--82.
+
+\bibitem{MerrillSabharwal2023}
+W.~Merrill and A.~Sabharwal,
+\emph{The parallelism tradeoff: Limitations of log-precision
+transformers.}
+Transactions of the Association for Computational Linguistics 11
+(2023), 531--545.
+
+\bibitem{LiuEtAl2023}
+B.~Liu, J.~T.~Ash, S.~Goel, A.~Krishnamurthy, and C.~Zhang,
+\emph{Transformers learn shortcuts to automata.}
+International Conference on Learning Representations, 2023.
+
+\bibitem{YangChiangAngluin2024}
+A.~Yang, D.~Chiang, and D.~Angluin,
+\emph{Masked hard-attention transformers recognize exactly the
+star-free languages.}
+Advances in Neural Information Processing Systems 37 (2024).
 
 \bibitem{DovetailRepo}
 A.~Pulle,
