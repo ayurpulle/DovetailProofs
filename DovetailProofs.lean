@@ -1,2 +1,17 @@
 import DovetailProofs.Descent
 import DovetailProofs.Saturation
+import DovetailProofs.Predictor.Basic
+import DovetailProofs.Predictor.Agent
+import DovetailProofs.Predictor.Semigroup
+import DovetailProofs.Predictor.Transport
+import DovetailProofs.Predictor.Support
+import DovetailProofs.Predictor.Syntactic
+import DovetailProofs.Predictor.WordProblem
+import DovetailProofs.Predictor.FreePredictor
+import DovetailProofs.Predictor.Rank
+import DovetailProofs.Predictor.M3
+import DovetailProofs.Predictor.Reset
+import DovetailProofs.Predictor.Interval
+import DovetailProofs.Predictor.MarkovReset
+import DovetailProofs.Predictor.ResetChain3
+import DovetailProofs.Predictor.Linear
