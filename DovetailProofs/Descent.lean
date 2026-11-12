@@ -22,9 +22,9 @@ Design notes:
 
 * Composition convention: `FreeMonoid.lift T` sends `o₁ ⋯ oₙ` to
   `T o₁ ∘ ⋯ ∘ T oₙ`, the opposite of the paper's row-vector convention
-  `T_{oₙ} ⋯ T_{o₁}`. The transition monoid here is therefore the opposite
-  monoid of the paper's `S`. Since `Con S ≃ Con Sᵐᵒᵖ` canonically, every
-  lattice-theoretic conclusion transfers verbatim.
+  `T_{oₙ} ⋯ T_{o₁}`. Only the parametrisation by words is reversed: as a set
+  of maps under composition, the transition monoid here is exactly the
+  paper's `S` (`Predictor/Basic.lean`, `mem_transitionMonoid_iff`).
 -/
 
 namespace Dovetail

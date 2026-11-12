@@ -16,9 +16,8 @@ formalised.
 - Words are `List O`; `run step w` is the paper's `δ_w = δ_{o_n} ∘ ⋯ ∘ δ_{o_1}`. The existing
   `Dovetail.transitionMonoid` (range of `FreeMonoid.lift`) uses the reversed word order, but as a
   set of maps under composition it is exactly the paper's `⟨δ_o⟩`
-  (`mem_transitionMonoid_iff`, `run_eq_lift`). The comment in `Descent.lean` that it is "the
-  opposite monoid of the paper's `S`" is therefore inaccurate: only the parametrisation by words
-  is reversed. `Descent.lean` was reused unchanged.
+  (`mem_transitionMonoid_iff`, `run_eq_lift`). The comment in `Descent.lean` now says this (it used to call it
+  the opposite monoid).
 - `X̂_p = Option P.X`, `†` = `none`. `τ_o` is defined intrinsically by the shift
   `f ↦ f(o·)/f(o)`; `tau_nu` proves it is the paper's `q_u ↦ q_{uo}` or `†`.
 - Agent definition: `F : Q⁺ → X_p` is a total `readout : Q → (O* → ℝ)` constrained only on live
@@ -145,13 +144,14 @@ Every `#print axioms` in the modules reports a subset of
 
 None in the formalised results. Minor observations, none affecting correctness:
 
-1. Lemma `lem:descent` and everything built on it never use finiteness of the alphabet.
+1. Lemma `lem:descent` and everything built on it never use finiteness of the alphabet. (The
+   paper now states the lemma for an arbitrary index set.)
 2. Thm `thm:transport` (ii) and the "in particular" of (i) need no finiteness of `S_A`; only the
    subgroup-lifting statement of (i) does (and `transport_fails_without_finiteness` confirms it
-   cannot be dropped there).
+   cannot be dropped there). (The paper now says so after the proof.)
 3. Prop `prop:markov-reset-general` does not need `q_ε` to differ from every `g_i` (the text
    before it argues this for the 3-symbol chain; the proof of the proposition does not use it,
-   and neither does the Lean).
+   and neither does the Lean). (The paper now notes it after the proof.)
 4. The complexity section (Thm `thm:pred-complexity`, including the perfect-subgroup length
    argument in (iii)) was read and checked by hand only; no gap was seen, but it is not
    machine-checked.

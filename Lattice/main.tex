@@ -326,7 +326,7 @@ state it here.
 \begin{lemma}[Descent]
 \label{lem:descent}
 Let $Q$ and $Y$ be sets, each equipped with a family of maps
-$\delta_o:Q\to Q$ and $\tau_o:Y\to Y$ indexed by the same finite alphabet
+$\delta_o:Q\to Q$ and $\tau_o:Y\to Y$ indexed by the same set
 $\Obs$, and let $L:Q\to Y$ be a surjection satisfying
 \[
   L\circ\delta_o=\tau_o\circ L
@@ -354,7 +354,8 @@ every generator $\tau_o$, so it is surjective.
 \end{proof}
 
 No structure on $Q$ or $Y$ is assumed: no dead state, no linearity, no
-probabilistic interpretation.  Everything specific to prediction enters
+probabilistic interpretation.  Nor does the proof use that $\Obs$ is
+finite.  Everything specific to prediction enters
 through the construction of a particular surjection $L$.  The lemma
 turns a statement about states into one about monoids, and from there
 the question of this paper is which properties of a monoid pass to
@@ -835,6 +836,14 @@ $\Phi(s)^n=\Phi(s)^{n+1}$, and $\Phi$ is onto.
 
 (iii) Monotonicity of $c$ under division.
 \end{proof}
+
+Finiteness of $S_A$ is used only to lift a subgroup in (i) and to
+define the complexity in (iii).  The second statement of (i) and, with
+aperiodicity read as the condition that every $s$ has an $n$ with
+$s^n=s^{n+1}$, part (ii) hold for every reachable exact predictor,
+because they use only that $S_p$ is a quotient of $S_A$.
+Example~\ref{ex:free-predictor} shows that the subgroup lifting in (i)
+does fail without finiteness.
 
 Part (i) gives a subgroup mapping onto $G$, not a copy of $G$: a
 predictor may cover a two-element group in $S_p$ by a four-element
@@ -1833,6 +1842,11 @@ transformations are precisely the identity and the $n$ distinct reset maps
 $c_i$, which satisfy $c_ic_j=c_i$.  The congruence statement follows from
 Theorem~\ref{thm:reset-con}.
 \end{proof}
+
+The proposition does not ask that the initial state $q_\eps$ differ
+from the $g_i$, as it does in the three-symbol chain above.  If
+$q_\eps$ equals some $g_i$ then $X_p$ has $n$ states and not $n+1$,
+and the monoid is the same.
 
 An exact predictor for this process only needs to retain the latest symbol (and
 an initial state before the first observation).  Its update rule is a reset, and
