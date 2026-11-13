@@ -86,7 +86,7 @@ $S_p$ of a stretch of input.
 
 Let a world produce a sequence of observations from a finite alphabet
 $\Obs$.  An exact predictive agent has enough information to return
-the conditional distribution of every finite future, it may
+the conditional distribution of every finite future; it may
 nevertheless have redundant states or implementation specificities.
 Our question is: which predictive structure, the canonical
 predictive states together with their observation labelled updates,
@@ -121,7 +121,7 @@ least as many as its smallest faithful permutation action
 
 These invariants all read the monoid $S_p$ and nothing else.  Two
 further layers sit around it.  Below is a possibility machine
-recording only which futures can occur (Section~\ref{sec:support}),
+recording only which futures can occur (Section~\ref{sec:support});
 above, the minimal linear predictor embeds into an extension of $S_p$
 by transition likelihoods, and passing back to $S_p$ is exactly the
 projection that discards the likelihood coordinate
@@ -264,8 +264,7 @@ such that
   p(u)=\sum_{o\in\Obs}p(uo)
   \quad (u\in\Obs^*).
 \]
-Here $p(u)$ is the probability that the process begins with the word $u$,
-the second condition is simple consistency, that the summed probabilities of all one symbol extensions to $u$ are
+Here $p(u)$ is the probability that the process begins with the word $u$; the second condition is simple consistency: the summed probabilities of all one symbol extensions to $u$ are
 equal to the probability of $u$.
 \end{definition}
 
@@ -402,7 +401,7 @@ finite.  Everything specific to prediction enters
 through the construction of a particular surjection $L$.  The lemma
 turns a statement about states into one about monoids, and from there
 the question of this paper is which properties of a monoid pass to
-its quotients, or more generally to its divisors, a monoid $T$
+its quotients, or more generally to its divisors; a monoid $T$
 \emph{divides} $S$ when $T$ is a quotient of a submonoid of $S$.
 Sections~\ref{sec:syntactic} and~\ref{sec:rank} transport the
 informative ones.  Section~\ref{sec:congruence} treats the most
@@ -425,11 +424,10 @@ where:
   \item $Q$ is the set of agent states,
   \item $q_0\in Q$ is the initial state,
   \item $d\in Q$ is the dead state, the agent's version of
-        $\dagger$, used for impossible continuations, like 
-        $\dagger$, a single formal element adjoined to the live states,
+        $\dagger$, used for impossible continuations; like $\dagger$, it is a single formal element adjoined to the live states,
   \item each $\delta_o:Q\to Q$ is the state update on observing $o$,
   \item $F$ reads out the complete conditional future law
-        represented by a live state, its domain $Q^+$ is
+        represented by a live state; its domain $Q^+$ is
         defined below.
 \end{itemize}
 
@@ -459,9 +457,9 @@ The predictor is exact when, for every $u$ with $p(u)>0$,
 \end{definition}
 
 After an impossible extension there is no conditional future law, 
-so exactness constrains nothing, rather than leave the update maps undefined, we route every impossible extension to the 
+so exactness constrains nothing. Rather than leave the update maps undefined, we route every impossible extension to the 
 single dead state and keep it there. 
-We call this the trimming convention, all dead branches are sent to one point, 
+We call this the trimming convention: all dead branches are sent to one point, 
 so the update maps are total and any two exact predictors can differ only on states that matter.
 
 
@@ -495,7 +493,7 @@ also holds at the absorbing dead state.
 \end{proof}
 
 This is an analogue of
-the Refinement Lemma from computational mechanics, any equally predictive rival partition refines the
+the Refinement Lemma from computational mechanics: any equally predictive rival partition refines the
 causal state partition, up to null histories \cite{ShaliziCrutchfield2001}.
 Lemma~\ref{lem:descent} lifts that state-level refinement to transition
 monoids.
@@ -543,7 +541,7 @@ histories only is not covered (Section~\ref{sec:results}).
 \label{sec:support}
 
 The predictive state $q_u$ records how likely each future is.  A coarser
-record keeps only which futures are possible at all, we call this
+record keeps only which futures are possible at all; we call this
 bare possibility.  This section shows
 that this coarser structure is itself a canonical machine, sitting below
 the predictive one, so that every exact predictor has a second, coarser
@@ -627,7 +625,7 @@ $\kappa=\ker\Phi$.
 The composite of the two equivariant surjections
 $Q\to\widehat X_p\to\widehat X_{\mathrm{supp}}$ (equivariant meaning
 commuting with every update map) is again an equivariant surjection, so Lemma~\ref{lem:descent} applies to each arrow and to the
-composite, the kernels nest because the composite identifies at least as
+composite; the kernels nest because the composite identifies at least as
 much as the first factor.
 \end{proof}
 
@@ -637,12 +635,12 @@ a finer one recording distinctions of conditional expectation.  The
 coarse layer is purely combinatorial: it depends only on the set
 $L_p$, not on any probability value.\footnote{In the terminology of symbolic
 dynamics, $\widehat X_{\mathrm{supp}}$ with the updates $\sigma_o$ is
-the follower-set automaton of the language $L_p$, for stationary
+the follower-set automaton of the language $L_p$; for stationary
 processes whose support is a sofic shift this is a standard object
 \cite{LindMarcus1995}, and the quotient $\sigma$ is the finite-history
 analogue of the relation between the history $\varepsilon$-machine and
 the Krieger cover \cite{TraversCrutchfield2025}.  In this section
-the layer enters only as a second instance of Lemma~\ref{lem:descent},
+the layer enters only as a second instance of Lemma~\ref{lem:descent};
 Lemma~\ref{lem:syntactic} later identifies $S_{\mathrm{supp}}$ with
 the syntactic monoid of $L_p$.}
 
@@ -654,7 +652,7 @@ $S_{\mathrm{supp}}$ is the trivial monoid exactly when every finite word
 is possible.  If $p(w)>0$ for all $w$, then $F_u=\Obs^*$ for every $u$,
 there is a single support state, and every $\sigma_o$ is the identity.
 Conversely, if some word is impossible, take a shortest impossible $wo$
-with $p(w)>0$, then $\sigma_o$ sends $F_w$ to $\dagger$ and is not the
+with $p(w)>0$; then $\sigma_o$ sends $F_w$ to $\dagger$ and is not the
 identity.  In particular, the full-support Markov chains of
 Section~\ref{sec:reset} have a trivial possibility layer: their entire
 canonical structure lives in the predictive layer.  A process can thus force rich structure at one layer
@@ -667,7 +665,7 @@ and none at the other.
 The quotient $S_p\to S_{\mathrm{supp}}$ of
 Corollary~\ref{cor:support-tower} can degenerate in either direction.
 Remark~\ref{rem:full-support} gave one extreme, where it collapses
-everything, the opposite occurs in two small hidden-Markov processes
+everything; the opposite occurs in two small hidden-Markov processes
 used as standard examples in the interpretability literature
 \cite{ShaiEtAl2024}.  The first, Z1R, cycles deterministically through
 ``0, then 1, then a fair coin''.  The second, RRXOR, emits two fair
@@ -676,7 +674,7 @@ words, so neither has a trivial possibility layer.
 
 For each process we computed, in exact rational arithmetic from the
 stationary initial condition, the predictive states, the canonical
-monoid, and the support quotient, scripts and outputs are in the
+monoid, and the support quotient; scripts and outputs are in the
 repository \cite{DovetailRepo}.  For Z1R: $|X_p|=7$ and $|S_p|=14$.
 For RRXOR: $|X_p|=36$ and $|S_p|=73$.  In both processes the
 state map $\sigma$ is genuinely lossy: Z1R merges one pair of
@@ -749,7 +747,7 @@ Let $f:\Obs^*\to Y$ be any map.  Its syntactic congruence is
 \]
 and its syntactic monoid is $M(f)=\Obs^*/{\equiv_f}$.  For a language
 $K\subseteq\Obs^*$ write $\equiv_K$ and $M(K)$ for the congruence and
-monoid of its indicator function, this is the usual syntactic monoid
+monoid of its indicator function; this is the usual syntactic monoid
 of $K$ \cite{Pin1986}.
 
 Define the state labelling of $p$ by
@@ -830,21 +828,21 @@ Computing the predictive state of a history and multiplying in $S_p$
 are two forms of the same task.  The state is
 $\nu(u)=\tau_u(q_\eps)$, one product in $S_p$ applied to one point.
 Conversely, when $X_p$ is finite, fix a history $u_x$ with
-$\nu(u_x)=x$ for each live $x$, then $\tau_w$ is the tuple
+$\nu(u_x)=x$ for each live $x$; then $\tau_w$ is the tuple
 $(\nu(u_xw))_{x\in X_p}$, that is, $|X_p|$ state computations with
 fixed prefixes.
 \end{remark}
 
 \subsection{Transport to finite predictors}
 
-A subgroup of a monoid $S$ is a subsemigroup that is a group, its
+A subgroup of a monoid $S$ is a subsemigroup that is a group; its
 identity is an idempotent of $S$ and need not be the identity of $S$.
 A finite monoid is aperiodic when all its subgroups are trivial,
 equivalently when for every $s$ there is $n$ with $s^n=s^{n+1}$.  A
 monoid $T$ divides $S$ when $T$ is a quotient of a submonoid of $S$.
 The group complexity $c(S)$ of a finite monoid is the least number of
 group factors in a wreath product of groups and aperiodic monoids,
-taken alternately, that $S$ divides, it is finite by the
+taken alternately, that $S$ divides; it is finite by the
 Krohn--Rhodes theorem, and it is monotone under division
 \cite{KrohnRhodes1965,RhodesSteinberg2009}.
 
@@ -855,7 +853,7 @@ monoid $S_A$ is finite, as it is whenever $Q$ is finite.  Then $S_p$
 is finite, and:
 \begin{enumerate}[label=(\roman*)]
   \item for every subgroup $G\subseteq S_p$ there is a subgroup
-        $H\subseteq S_A$ with $\Phi(H)=G$, in particular every group
+        $H\subseteq S_A$ with $\Phi(H)=G$; in particular every group
         that divides $S_p$ divides $S_A$,
   \item if $S_A$ is aperiodic then $S_p$ is aperiodic,
   \item $c(S_p)\le c(S_A)$.
@@ -925,8 +923,8 @@ one only counts the length of the history modulo two.
 \end{example}
 
 The reset chains of Section~\ref{sec:reset} are a first check on
-these invariants.  The monoid $R_n^1$ is aperiodic, every element
-satisfies $s^2=s$, so the last-symbol predictor that carries an $M_3$
+these invariants.  The monoid $R_n^1$ is aperiodic (every element
+satisfies $s^2=s$), so the last-symbol predictor that carries an $M_3$
 congruence interval is trivial for all three parts of
 Theorem~\ref{thm:transport}.
 
@@ -950,7 +948,7 @@ next-symbol law of a possible history is
 which depends on $u$ only through $\nu(u)$ and so takes finitely many
 values.  A family of functions, one for each input length,
 \emph{predicts $p$} when it returns $n_p(u)$ on every possible word
-$u$, nothing is required on impossible words.  The \emph{word
+$u$; nothing is required on impossible words.  The \emph{word
 problem} of $S_p$ is the task of computing $\tau_w$ from $w$.  We use
 the standard classes
 $\mathrm{AC}^0\subseteq\mathrm{ACC}^0\subseteq\mathrm{TC}^0
@@ -985,7 +983,7 @@ Write $w=o_1\cdots o_m$ and let $c_i$ be the $o_i$-coordinate of the
 value returned at $u_xo_1\cdots o_{i-1}$.  Then $u_xw\in L_p$ exactly
 when every $c_i$ is positive.  If $u_xw$ is possible, all the queried
 words are possible and the values are correct.  If it is not, let $i$
-be least with $u_xo_1\cdots o_i\notin L_p$, the query at
+be least with $u_xo_1\cdots o_i\notin L_p$; the query at
 $u_xo_1\cdots o_{i-1}$ is at a possible word and returns $c_i=0$, so
 the conjunction fails whatever the later queries return.
 
@@ -1247,7 +1245,7 @@ injective (Figure~\ref{fig:urn}) and
   \node[left]  at (-0.08,0.5) {\scriptsize$\mathsf b$};
 \end{tikzpicture}
 \caption{Predictive states of the urn.  Drawing red moves right,
-drawing blue moves up, no two arrows merge, so no word ever collapses
+drawing blue moves up, and no two arrows merge, so no word ever collapses
 two states.}
 \label{fig:urn}
 \end{figure}
@@ -1256,17 +1254,17 @@ No word is synchronising, and by
 Theorem~\ref{thm:rank-bound} no exact predictor of this process can
 bound its number of states: it must hold unboundedly many distinctions
 forever.  Note that $X_p$ is infinite here, so the Hankel rank of
-Section~\ref{sec:linear} is infinite as well, nothing in this section
+Section~\ref{sec:linear} is infinite as well; nothing in this section
 assumed finiteness.
 \end{example}
 
 The reset chain and the urn are opposite answers to the same question.
 In one, the world licenses total forgetting at every step and the forced
-memory is a single symbol, in the other, the world licenses no merging
+memory is a single symbol; in the other, the world licenses no merging
 at all and the forced memory grows without bound.  The quantity
 $\rk(\tau_w)$ interpolates between them word by word.\footnote{The sets $I_k=\{s\in S_p:\rk(s)\le k\}$ are two-sided ideals, so the rank profile also stratifies
 $S_p$ into Rees quotients, each again contributing an inherited
-interval via congruence correspondence, we do not pursue this here.}
+interval via congruence correspondence; we do not pursue this here.}
 
 The rank profile also ties the memory bound to the subgroups of
 Section~\ref{sec:syntactic}.
@@ -1304,7 +1302,7 @@ For $\varepsilon$-machines, Travers and Crutchfield analyse when and
 how fast an observer of a stationary finite-state source pins down the
 predictive state, including a polynomial-time test for the existence of
 a synchronising word
-\cite{TraversCrutchfield2011a,TraversCrutchfield2011b}, for
+\cite{TraversCrutchfield2011a,TraversCrutchfield2011b}; for
 deterministic automata, reset words are the subject of a large
 literature around the \v{C}ern\'y conjecture \cite{Volkov2008}.  The
 contribution of this section is neither notion but the transport:
@@ -1328,7 +1326,7 @@ Let
 \[
   W=\R^{\Obs^*}
 \]
-be the vector space of all real functions on finite futures, we never
+be the vector space of all real functions on finite futures; we never
 choose a basis for $W$.  Define the unnormalised row
 \[
   r_u(v)=p(uv),
@@ -1353,9 +1351,8 @@ Then $T_or_u=r_{uo}$, so $T_o$ restricts to a linear endomorphism of
 $V$.  Use a column convention.  For $w=o_1\cdots o_n$, put
 \[
   T_w=T_{o_n}\cdots T_{o_1},
-\]
-then $T_wr_u=r_{uw}$.  Hence $w\mapsto T_w$ is a homomorphism into the
-opposite monoid of $\End(V)$, this has no effect on congruence
+\] so that $T_wr_u=r_{uw}$.  Hence $w\mapsto T_w$ is a homomorphism into the
+opposite monoid of $\End(V)$; this has no effect on congruence
 lattices, as noted after Lemma~\ref{lem:descent}.  The readout is the
 linear functional
 \[
@@ -1376,7 +1373,7 @@ positive ratio.  Call
 \[
   [f]=\{cf:c>0\}
 \]
-the \emph{positive ray} through a nonzero $f\in V$, positivity matters,
+the \emph{positive ray} through a nonzero $f\in V$; positivity matters,
 since recovering $q_u$ from $r_u$ means normalising the
 $\eps$-coordinate to one, which only a positive multiple permits.  The
 assignment
@@ -1401,7 +1398,7 @@ least $\dim V$.
 \begin{proof}
 Reachability is the definition $V=\spn\{T_ur_\eps:u\in\Obs^*\}$.  If
 $f\in V$ satisfies $\lambda(T_vf)=0$ for every $v$, then
-$f(v)=0$ for every future $v$, so $f=0$, this is observability.  The
+$f(v)=0$ for every future $v$, so $f=0$; this is observability.  The
 surjection constructed in Proposition~\ref{prop:linear-quotient} below gives
 the dimension bound.
 \end{proof}
@@ -1534,7 +1531,7 @@ likelihoods says that they also have the same value under $\lambda$.  A nonzero
 Hankel row has positive $\eps$-coordinate, so its positive ray together with that
 coordinate determines it uniquely.  Hence $Tr_u=T'r_u$.
 
-The nonzero rows $r_u$ span $V$, zero rows contribute nothing.  Therefore $T$ and
+The nonzero rows $r_u$ span $V$; zero rows contribute nothing.  Therefore $T$ and
 $T'$ agree on a spanning set and are equal.
 \end{proof}
 
@@ -1630,9 +1627,9 @@ single fibre: the opposite extreme.}
 
 Sections~\ref{sec:agent}, \ref{sec:support}, and this one now assemble
 into a tower, drawn in Figure~\ref{fig:tower}.  A process forces structure at three
-separable levels, what is possible, what is conditionally expected,
+separable levels: what is possible, what is conditionally expected,
 and how likely each transition is, and every invariant of $S_p$ reads
-exactly the middle level (Corollary~\ref{cor:projection}), nothing here
+exactly the middle level (Corollary~\ref{cor:projection}); nothing here
 decomposes $S_p$ itself in the cascade sense \cite{DrosteEtAl2011}.
 
 \begin{figure}[ht]
@@ -1677,11 +1674,11 @@ admissibility is defined as a lumping of transition operators, the
 admissible hierarchy is exactly $\Con(S)$.\footnote{This is a
 conditional statement: it does not make every algebraic congruence
 meaningful for a particular agent's dynamics.}  This concerns
-transformations, not predictive states, coarse graining states is a
+transformations, not predictive states; coarse graining states is a
 different construction.
 
 $\Con(S)$ denotes the set of all congruences on $S$, ordered by
-refinement, the intersection of two congruences is a congruence, and any
+refinement; the intersection of two congruences is a congruence, and any
 family of congruences has a coarsest common refinement, so $\Con(S)$ is a
 lattice, with bottom the equality relation and top the relation merging
 everything.  The interval $[\kappa,\top]$ consists of the congruences at
@@ -1749,8 +1746,8 @@ and transition matrix
 \]
 The matrix is entrywise positive, and its three rows are distinct.  After
 any nonempty history, the conditional future
-law depends only on the last observed symbol, write $g_i$ for the
-predictive state after observing $i$, its next symbol distribution is
+law depends only on the last observed symbol; write $g_i$ for the
+predictive state after observing $i$; its next symbol distribution is
 row $i$ of $M$.  The chain is started in its stationary distribution, so before the first
 observation the initial predictive state $q_\eps$ assigns each symbol
 probability $\tfrac13$.  No row of $M$ is uniform, so $q_\eps$ differs
@@ -1843,7 +1840,7 @@ right multiplication by $c_j$ gives
 \[
   c_j=1c_j\equiv c_ic_j=c_i.
 \]
-Thus all constants are equivalent to $c_i$, and hence to $1$, the congruence is
+Thus all constants are equivalent to $c_i$, and hence to $1$; the congruence is
 universal.  Every non-universal congruence therefore fixes $1$, after which its
 restriction to the constants is an arbitrary partition.
 \end{proof}
@@ -1894,7 +1891,7 @@ An exact predictor for this process only needs to retain the latest symbol (and
 an initial state before the first observation).  Its update rule is a reset, and
 its predictions are the corresponding row of $M$ followed by the same Markov
 law.  This representation is finite,
-explicit, and transparent, Section~\ref{sec:rank} makes the word
+explicit, and transparent; Section~\ref{sec:rank} makes the word
 transparent precise, as the statement that every generator has live
 rank one, so the process licenses total forgetting at every step.
 Nevertheless its canonical transition monoid has an $M_3$ congruence
@@ -1906,8 +1903,8 @@ conclusions:
   \item every reachable exact predictor of this process inherits a
         non distributive congruence interval,
   \item that non distributivity cannot itself imply that the predictor uses
-        entangled, distributed, or uninterpretable features,
-        Corollary~\ref{cor:projection} gives the mechanism, the witness
+        entangled, distributed, or uninterpretable features;
+        Corollary~\ref{cor:projection} gives the mechanism: the witness
         lives in a projection that discards likelihoods, and here the
         likelihoods carry every probability value.
 \end{enumerate}
@@ -1927,7 +1924,7 @@ is injective for \emph{every} finite lattice, not only a distributive
 one.  Birkhoff's representation theorem for finite lattices says that
 $L$ is distributive exactly when this assignment is a lattice
 isomorphism onto the down-sets of the join-irreducibles (subsets
-closed downwards, ordered by inclusion), equivalently, exactly when
+closed downwards, ordered by inclusion); equivalently, exactly when
 $L$ contains neither $M_3$ nor $N_5$ of Figure~\ref{fig:m3n5} as a
 sublattice \cite{DaveyPriestley2002}.
 
@@ -1963,7 +1960,7 @@ sublattice \cite{DaveyPriestley2002}.
   \end{scope}
 \end{tikzpicture}
 \caption{The two minimal non-distributive lattices.  In $M_3$ any two
-of $a,b,c$ meet at $\bot$ and join at $\top$, in $N_5$ the chain
+of $a,b,c$ meet at $\bot$ and join at $\top$; in $N_5$ the chain
 $a<c$ and the element $b$ do the same.}
 \label{fig:m3n5}
 \end{figure}
@@ -1976,7 +1973,7 @@ therefore not injectivity but the union rule
 \]
 In $M_3$ the five elements still have five distinct bit-vectors, but
 joining two atoms activates the third: the canonical coordinates are
-not union-compositional, equivalently, there is no union/intersection
+not union-compositional; equivalently, there is no union/intersection
 representation of the lattice.  This is the precise content of the
 word obstruction as used in this paper: $M_3$ and $N_5$ block a
 compositional coordinate representation of the lattice of admissible
@@ -2404,9 +2401,9 @@ Second, the transport theorem needs a finite update monoid
 without one is conditional on $\mathrm{TC}^0\ne\mathrm{NC}^1$ and
 asymptotic in the length.  Third, accuracy must be uniform over
 possible histories (Remark~\ref{rem:uniform}).  Fourth, the
-individual objects are close to known territory, causal states,
+individual objects are close to known territory (causal states,
 follower-set automata, syntactic monoids, synchronisation theory, the
-projective/likelihood split, and the claims made here are the
+projective/likelihood split), and the claims made here are the
 passage from a process to its monoid and the transport of that
 structure to arbitrary exact predictors, not the objects themselves.
 
@@ -2420,7 +2417,7 @@ witness always descends to the possibility layer, testable in the
 regime $\bot\subsetneq\kappa_{\mathrm{supp}}\subsetneq\top$ of
 Example~\ref{ex:one-zero} (Section~\ref{subsec:witnesses}).  A
 criterion separating congruence obstructions that block genuine
-decompositions of the monoid from those that are counting artefacts,
+decompositions of the monoid from those that are counting artefacts;
 congruence permutability is the natural candidate
 (Section~\ref{sec:coordinates}).  And, for controllers,
 state-locality (Section~\ref{sec:controllers}).
