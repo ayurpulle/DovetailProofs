@@ -17,6 +17,8 @@ from .processes import get
 CLASS = {"act_ap5": "aperiodic", "z1r": "aperiodic", "act_latch": "aperiodic, no reset word", "act_latch4": "aperiodic, no reset word",
          "act_latchwalk": "aperiodic, no reset word", "act_z6": "abelian group", "act_s3": "solvable group",
          "act_s4": "solvable group", "rrxor": "contains Z_3", "act_a5": "non-solvable group"}
+NAME = {"act_ap5": "clamped walk", "z1r": "Z1R", "act_latch": "latched process", "act_latch4": "four-way latch",
+        "act_latchwalk": "walk latch", "act_z6": "Z2 x Z3", "act_s3": "S3", "act_s4": "S4", "rrxor": "RRXOR", "act_a5": "A5"}
 ORDER = ["act_ap5", "z1r", "act_latch", "act_latch4", "act_latchwalk", "act_z6", "act_s3", "act_s4", "rrxor", "act_a5"]
 BUCKETS = ("in", "x2", "x4")
 
@@ -108,7 +110,7 @@ def figure(runs, out: Path) -> None:
             if any(y is None for y in ys):
                 continue
             ax.plot(range(len(depths)), ys, styles[p], color=colours[CLASS[p]], marker="o", ms=4, lw=2,
-                    label=f"{p} ({CLASS[p]})")
+                    label=f"{NAME[p]} ({CLASS[p]})")
         ax.axhline(1, color="0.6", lw=1)
         ax.set_yscale("log")
         ax.set_xticks(range(len(depths)), [str(d) for d in depths])

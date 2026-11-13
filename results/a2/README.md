@@ -10,7 +10,7 @@ Short answers, for these models:
    and the literal symbols already give, at depths 4 and 6, in any process or seed. This is the
    null result the project plan named in advance.
 2. **Aperiodic or not is what matters; solvable or not does not.** Models of the aperiodic
-   processes keep predicting beyond the trained length. Models of every group process do not, at
+   processes keep predicting at twice the trained length (at four times, Z1R is erratic). Models of every group process do not, at
    any depth, and A5 is no worse than S3, S4 or Z2 x Z3. Training on four times the length does
    not change this.
 3. **It is aperiodicity, not having a reset word.** Three processes that are aperiodic with no
@@ -71,6 +71,12 @@ Median over seeds at positions 1-16 (trained) / 17-32 / 33-64:
   all six comparisons). At depth 1, positions 17-32, A5 is worse (p = 0.01).
 - Depth helps the group models at twice the trained length (about 0.9 at depth 1, about 0.4 at
   depth 6) and not at four times.
+- **The line is aperiodicity of `S_p`, not a circuit class.** RRXOR's monoid contains Z_3, but no
+  set of elements of words of one length contains a non-trivial group (`python -m
+  predictive.equallength rrxor`), so the paper's lower bound does not apply to it. It can be
+  predicted in AC^0: the state is a function of which of the three phases are consistent with the
+  history, the length mod 3 and the last two symbols (checked against the exact machine for all
+  possible words up to length 14). Its models fail like those of the groups all the same.
 - Z1R at positions 33-64 varies across seeds from 0.002 to 2.4 with no trend in depth, so
   "aperiodic models generalise" holds cleanly only to twice the trained length for Z1R.
 
@@ -124,7 +130,8 @@ Depth 6, medians over seeds (all depths are in [`a2.md`](a2.md)):
 - Deeper models hold the state and little else: 1% to 7% of residual variance is not explained by
   the state at depth 6. Clustering the final residuals gives, for A5, S3 and Z2 x Z3 at depth 6, a
   deterministic automaton with one cluster per predictive state whose transition monoid has
-  exactly |S_p| elements in every seed. That is the machine itself, so it shows the state is
+  exactly |S_p| elements in every seed. For S4 and `act_latch` this holds in two seeds of four,
+  and for the other processes in none. That is the machine itself, so it shows the state is
   tracked correctly, not that elements are stored.
 - **Timing** ([`timing.json`](timing.json)): probing the checkpoints from step 500 onward, the
   element readout for the group processes at depths 4 and 6 is below the comparisons at every

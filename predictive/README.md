@@ -14,6 +14,7 @@ and their predictive monoids, and the training and readout code.
 | `lengthgen.py` | Next-symbol training at every position, loss by position beyond the trained length |
 | `monoidprobe.py` | Readouts of monoid elements and predictive states from the residual stream |
 | `a2report.py` | Tables and the length-generalisation figure |
+| `equallength.py` | Whether the elements of words of one length contain a non-trivial group |
 
 The exact modules need only the standard library. Training needs PyTorch.
 

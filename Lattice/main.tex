@@ -72,10 +72,10 @@ is also inherited, as an interval, but it is non-distributive already
 for first order Markov chains predicted by storing the last symbol,
 and certifies nothing about internal representations.  We then test
 what training finds.  Small transformers trained to predict processes
-chosen by the class of $S_p$ keep predicting beyond the trained
+chosen by the class of $S_p$ keep predicting at twice the trained
 length when $S_p$ is aperiodic, including for processes with no
-synchronising word, and stop when $S_p$ is a group; solvable and
-non-solvable groups are not distinguishable.  Linear readouts of
+synchronising word, and do not when $S_p$ contains a non-trivial
+group; solvable and non-solvable groups are not distinguishable.  Linear readouts of
 their activations recover the predictive state and not the element of
 $S_p$ of a stretch of input.
 \end{abstract}
@@ -150,9 +150,11 @@ their effect on the current state, and whether the class of $S_p$
 says anything about what training finds, are empirical questions.
 Section~\ref{sec:experiment} reports an experiment on both, with
 small transformers trained on short histories of processes chosen by
-their monoid.  Three things come out.  The models keep predicting
-beyond the trained length when $S_p$ is aperiodic and stop when $S_p$
-is a group, and this is aperiodicity and not the presence of a reset
+their monoid.  Three things come out.  The models keep predicting at
+twice the trained length when $S_p$ is aperiodic and do not when
+$S_p$ contains a non-trivial group (at four times the trained length
+one of the five aperiodic processes is erratic), and this is
+aperiodicity and not the presence of a reset
 word, since three processes that are aperiodic with no synchronising
 word behave like the other aperiodic ones.  The line between solvable
 and non-solvable groups, which is where the complexity theorem puts
@@ -161,10 +163,11 @@ than $S_3$, $S_4$ or $\mathbb Z_2\times\mathbb Z_3$.  And the
 networks hold the predictive state and almost nothing else; a linear
 readout finds no more of the element $\tau_w$ than the states and the
 literal symbols already give.  So the dichotomy that training
-respects is the coarsest one in Table~\ref{tab:classes}, between
-$\mathrm{AC}^0$ and everything above it, and $S_p$ is present in
-these networks as the monoid of the update they compute and not as a
-represented quantity.
+respects is aperiodicity of $S_p$.  It is not a circuit class: one of
+the processes has a monoid containing $\mathbb Z_3$ and can still be
+predicted in $\mathrm{AC}^0$, and its models fail like those of the
+groups.  And $S_p$ is present in these networks as the monoid of the
+update they compute and not as a represented quantity.
 
 The state level foundations are classical: identification of histories
 by their conditional future laws, with any equally predictive rival
@@ -220,7 +223,8 @@ The contributions are:
   \item the layers around $S_p$: a possibility quotient below and a
         likelihood extension above, with exact computations placing
         two standard example processes entirely at the possibility
-        layer, generic Markov chains entirely at the likelihood
+        layer, generic Markov chains with nothing at the possibility
+        layer and all their probability values in the likelihood
         layer, and one process strictly between
         (Sections~\ref{sec:support}, \ref{sec:quantitative}),
   \item a scope limit on the congruence lattice: its inherited
@@ -234,7 +238,16 @@ The contributions are:
         (Section~\ref{sec:experiment}).
 \end{enumerate}
 All code supporting the computations, exact and reproducible, is
-available in the paper's repository \cite{DovetailRepo}.
+available in the paper's repository \cite{DovetailRepo}, together
+with a Lean formalisation.  It covers the descent lemma, the quotient
+theorem and its corollaries, the syntactic lemma, parts (i) and (ii)
+of Theorem~\ref{thm:transport} with
+Example~\ref{ex:free-predictor}, Theorem~\ref{thm:rank-bound} and
+Proposition~\ref{prop:group-rank}, the linear realisation and
+Theorem~\ref{thm:semidirect} at the level of words, and the
+congruence results of Section~\ref{sec:congruence}.  Group
+complexity, Theorem~\ref{thm:pred-complexity} and
+Corollary~\ref{cor:transformers} are not formalised.
 
 \section{Stochastic languages and conditional futures}
 \label{sec:process}
@@ -1738,8 +1751,7 @@ The matrix is entrywise positive, and its three rows are distinct.  After
 any nonempty history, the conditional future
 law depends only on the last observed symbol, write $g_i$ for the
 predictive state after observing $i$, its next symbol distribution is
-row $i$ of $M$.  The chain is started in its stationary distribution
-(uniform because $M$ is doubly stochastic), so before the first
+row $i$ of $M$.  The chain is started in its stationary distribution, so before the first
 observation the initial predictive state $q_\eps$ assigns each symbol
 probability $\tfrac13$.  No row of $M$ is uniform, so $q_\eps$ differs
 from every $g_i$ already on the next symbol, and
@@ -1897,7 +1909,7 @@ conclusions:
         entangled, distributed, or uninterpretable features,
         Corollary~\ref{cor:projection} gives the mechanism, the witness
         lives in a projection that discards likelihoods, and here the
-        likelihoods are the whole content.
+        likelihoods carry every probability value.
 \end{enumerate}
 
 
@@ -1993,9 +2005,10 @@ of $S_p$, the $M_3$ witness included, is an invariant of the support
 language $L_p$ alone: any process with the same impossibility pattern
 carries the same witness in its possibility interval.  The reset
 chains are the opposite pole.  There $\kappa_{\mathrm{supp}}=\top$,
-and the $M_3$ contains $\kappa_{\mathrm{supp}}$ in none of its five
-elements except the top, so that witness is built entirely from
-probabilities.  Because $\kappa_{\mathrm{supp}}$ is trivial in Z1R and
+and the top of the $M_3$ is the congruence merging the three resets,
+which is not universal.  So none of its five elements contains
+$\kappa_{\mathrm{supp}}$: the witness lies strictly below the
+possibility interval and is built entirely from probabilities.  Because $\kappa_{\mathrm{supp}}$ is trivial in Z1R and
 RRXOR, these examples do not test whether a witness built from
 impossibility always descends to the possibility interval.
 Example~\ref{ex:one-zero} lies in the regime where the question is
@@ -2068,9 +2081,10 @@ so when every point is reachable $X_p$ is the set of points and $S_p$
 is the monoid generated by $g_0,g_1$.  We use eight such processes,
 chosen by their monoid, together with two standard ones, Z1R and
 RRXOR \cite{ShaiEtAl2024}.  Table~\ref{tab:a2-lg} lists them; the
-sizes are computed exactly.  The group cases all satisfy the
-hypothesis of Theorem~\ref{thm:pred-complexity}(ii), and $A_5$ that
-of (iii).
+sizes are computed exactly.  The four group processes all satisfy
+the hypothesis of Theorem~\ref{thm:pred-complexity}(ii), by
+enumeration of the sets $\tau(\Obs^t)$, and $A_5$ that of (iii).
+RRXOR does not, and we return to it below.
 
 Three of the eight separate two properties that otherwise coincide.  The
 clamped walk and Z1R are aperiodic and also have synchronising words,
@@ -2105,7 +2119,8 @@ A causal transformer reads a start token followed by sampled symbols
 and is trained at every position to predict the next symbol.
 Training sequences have $16$ symbols and are sampled afresh at every
 step.  Positions are learned embeddings, shifted by a random offset
-during training so that every position up to $96$ is trained.  Depths
+during training so that every position up to $96$ is trained ($384$
+for the models trained on $64$ symbols).  Depths
 are $1,2,4,6$ with widths $128,92,64,52$, which keeps the parameter
 count between $2.0\times10^5$ and $2.1\times10^5$.  There are four
 seeds for each process and depth, $160$ models in all, each trained
@@ -2201,9 +2216,21 @@ $\mathbb Z_2\times\mathbb Z_3$ it does neither.  Neither observation contradicts
 Corollary~\ref{cor:transformers}, which is asymptotic and concerns
 what can be expressed, not what training finds; at these lengths
 every one of these processes can be predicted exactly at these
-depths \cite{LiuEtAl2023}.  The line that training respects here is
-the one between $\mathrm{AC}^0$ and its complement, not the one
-between solvable and non-solvable groups.
+depths \cite{LiuEtAl2023}.
+
+Nor is the line that training respects a circuit class.  The monoid
+of RRXOR contains $\mathbb Z_3$, but enumeration shows that no
+$\tau(\Obs^t)$ contains a non-trivial group: the group is a phase
+clock whose elements are told apart by the length of the word, as in
+Example~\ref{ex:free-predictor}.  So
+Theorem~\ref{thm:pred-complexity}(ii) does not apply, and RRXOR can
+in fact be predicted in $\mathrm{AC}^0$.  Whether a phase is
+consistent with a history is a conjunction over the positions where
+that phase puts an exclusive-or, and the predictive state is a
+function of the set of consistent phases, the length modulo three and
+the last two symbols.  Yet the RRXOR models fail beyond the trained
+length like those of the groups.  What the data track is aperiodicity
+of $S_p$, and not the complexity of exact prediction.
 
 The aperiodic case has its own limit.  For the clamped walk the loss
 at positions $33$ to $64$ falls steadily with depth, to $0.06$.  For
@@ -2272,6 +2299,9 @@ somewhat better in the shallow group models.  It is clearest for
 $A_5$ at depth $2$, where it is $0.65$ against $0.52$ for both
 comparisons, with a margin of at least $0.11$ in all four seeds; the
 margin is about $0.05$ at depth $4$ and at most $0.04$ at depth $6$.
+The latched process and its four-way variant keep a small margin of
+the same kind at depth $6$, $0.03$ to $0.04$ and $0.02$ in every
+seed.
 Probing the saved checkpoints from step $500$ to the end gives the
 same picture at every stage: for the group processes at depths $4$
 and $6$ the element readout is below the comparisons at every
@@ -2285,9 +2315,11 @@ the share of residual variance not explained by the state is at most
 $7\%$.  Clustering the final residuals into $|X_p|$
 clusters and reading off the map from a cluster and a symbol to the
 next cluster gives, for $A_5$, $S_3$ and
-$\mathbb Z_2\times\mathbb Z_3$ at depth $6$, a deterministic
-automaton whose clusters are single predictive states and whose
-transition monoid has exactly $|S_p|$ elements, in every seed.  So
+$\mathbb Z_2\times\mathbb Z_3$ at depth $6$, an automaton whose
+clusters are predictive states (purity at least $0.98$) and whose
+transition monoid has exactly $|S_p|$ elements, in every seed.  For
+$S_4$ and for the latched process this holds in two seeds of four,
+and for the other processes in none.  So
 $S_p$ is present in these networks in the sense the theory requires,
 as the monoid of the update that the computed function induces on
 states, and not as a represented quantity.  We did not run
@@ -2357,7 +2389,8 @@ forced memory word by word, and subgroups sit at rank levels that
 bound them.  Around $S_p$ sit a possibility quotient and a likelihood
 extension that none of these invariants see, and the reset chains and
 the computed examples bracket where a process's structure can live:
-entirely in the likelihoods, or entirely in bare possibility.  The
+with nothing at the possibility layer, or entirely in bare
+possibility.  The
 congruence lattice is inherited too, and is uninformative.
 
 Four limits should be read alongside.  First, nothing here locates
@@ -2478,11 +2511,6 @@ P.~M.~Riechers,
 stream.}
 Advances in Neural Information Processing Systems 37 (2024),
 75012--75034.  arXiv:2405.15943.
-
-\bibitem{JurgensCrutchfield2021}
-A.~M.~Jurgens and J.~P.~Crutchfield,
-\emph{Shannon entropy rate of hidden Markov processes.}
-Journal of Statistical Physics 183, 32 (2021).  arXiv:2008.12886.
 
 \bibitem{Howie1995}
 J.~M.~Howie,
