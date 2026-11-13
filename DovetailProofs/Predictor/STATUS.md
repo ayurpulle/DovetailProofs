@@ -7,7 +7,7 @@ Scope (as revised by the author): only results that are new in the paper, with t
 proofs; cited background is listed in one line each and not formalised beyond what the proofs of
 the new results need.
 
-No `sorry`, `admit`, `axiom`, `native_decide` or `implemented_by` anywhere in the 15 modules. No
+No `sorry`, `admit`, `axiom`, `native_decide` or `implemented_by` anywhere in the 16 modules. No
 `*Open.lean` file was needed. No gap or false statement was found in any result that was
 formalised.
 
@@ -78,6 +78,7 @@ formalised.
 | Cor, `M₃` in `Con(S_p)` (1798) | N | `Reset.isM3_fin3`, `resetChain3_isM3`, `resetChain3_nonDistrib` (Reset, ResetChain3) | proved (differs: the `M₃` `{⊥, a, b, c, θ}` with `θ ≠ ⊤` is exhibited; that `[⊥, θ]` has no further element is not stated separately, it follows from `conEquiv`) |
 | Prop `prop:markov-reset-general` (1810) | N | `MarkovChain.resetEquiv`, `conSpEquiv`, `nonDistrib_con_Sp`, `nonDistrib_con_SA` (MarkovReset) | proved |
 | Remark `rem:controllers` (1982) | N | — | not formalised (discussion, open) |
+| Section `sec:experiment`, latched process: a transitive aperiodic transformation monoid on a finite set has a constant map | N | `exists_const_of_aperiodic_of_transitive`, `not_transitive_of_aperiodic_of_no_const`, `fixes_range_of_minimal_rank` (Constant) | proved (differs: uses a minimum-rank element and that an aperiodic permutation of its image is the identity, instead of `eMe = {e}` for an idempotent; the experiment itself is empirical and out of scope) |
 
 Background, not formalised:
 

@@ -15,3 +15,4 @@ import DovetailProofs.Predictor.Interval
 import DovetailProofs.Predictor.MarkovReset
 import DovetailProofs.Predictor.ResetChain3
 import DovetailProofs.Predictor.Linear
+import DovetailProofs.Predictor.Constant
