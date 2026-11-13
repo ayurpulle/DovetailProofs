@@ -1736,9 +1736,9 @@ and transition matrix
 \]
 The matrix is entrywise positive, and its three rows are distinct.  After
 any nonempty history, the conditional future
-law depend only on the last observed symbol, write $g_i$ for the
+law depends only on the last observed symbol, write $g_i$ for the
 predictive state after observing $i$, its next symbol distribution is
-row $i$ of $M$.  The chain is started in its stationary distribution,
+row $i$ of $M$.  The chain is started in its stationary distribution
 (uniform because $M$ is doubly stochastic), so before the first
 observation the initial predictive state $q_\eps$ assigns each symbol
 probability $\tfrac13$.  No row of $M$ is uniform, so $q_\eps$ differs
@@ -2075,8 +2075,9 @@ of (iii).
 Three of the eight separate two properties that otherwise coincide.  The
 clamped walk and Z1R are aperiodic and also have synchronising words,
 after which the state is known whatever came before; the group
-processes have neither property.  An aperiodic process with no
-synchronising word cannot be strongly connected.  Indeed, let $M$ be
+processes have neither property.  Among processes of this kind, an
+aperiodic one with no synchronising word cannot be strongly
+connected.  Indeed, let $M$ be
 a finite aperiodic transformation monoid in which every point can be
 moved to every other, and let $e$ be an idempotent of minimum rank.
 Then $eMe=\{e\}$, because it is a group in an aperiodic monoid.  For
@@ -2131,74 +2132,6 @@ times the trained length the group models are no better than ignoring
 the input.  RRXOR, whose monoid contains $\mathbb Z_3$, behaves like
 the groups.
 
-The latched processes say which property this is.  None of the
-three has a synchronising word, and from depth $2$ they generalise at
-least as well as the two processes that have one: of their $36$
-models, $34$ are below $0.1$ at positions $33$ to $64$ and twelve are
-below $0.01$; the other two are at $0.22$ and $0.36$.  This holds
-when four components must be told apart and when a clamped walk has
-to be run inside the selected component.  So a reset word is not what
-the aperiodic models rely on.  At depth $1$ all three fail beyond the
-trained length, with median loss between $0.55$ and $0.83$ at
-positions $17$ to $32$, the only aperiodic cases that do.
-
-Two predictions one might draw from Table~\ref{tab:classes} are not
-borne out.  First, the solvable groups do not behave differently
-from $A_5$.  At depths $2$, $4$ and $6$ the losses of the $A_5$
-models and of the models of the three solvable groups are not
-distinguishable at either unseen range (Mann--Whitney $p>0.2$ in all
-six comparisons; at depth $1$ and positions $17$ to $32$ the $A_5$
-models are worse, $p=0.01$).  Second, depth does not buy length.
-Depth lowers the loss of the group models at positions $17$ to $32$,
-from about $0.9$ at depth $1$ to about $0.4$ at depth $6$, but not at
-positions $33$ to $64$.  Neither observation contradicts
-Corollary~\ref{cor:transformers}, which is asymptotic and concerns
-what can be expressed, not what training finds; at these lengths
-every one of these processes can be predicted exactly at these
-depths \cite{LiuEtAl2023}.  The line that training respects here is
-the one between $\mathrm{AC}^0$ and its complement, not the one
-between solvable and non-solvable groups.
-
-A longer trained length does not change this.  We retrained the
-clamped walk, $S_3$, $S_4$ and $A_5$ at depths $2$ and $6$ on
-histories of $64$ symbols, four seeds each, and evaluated to $256$
-(Table~\ref{tab:a2-long}).  At positions $65$ to $128$ every model of
-the clamped walk is below $0.19$ and every group model is above
-$0.37$; at positions $129$ to $256$ the group models are again no
-better than ignoring the input.  No gap opens between $A_5$ and the
-solvable groups: beyond the trained length they are not
-distinguishable at either depth (Mann--Whitney $p>0.4$ in all four
-comparisons).  Within the trained length the loss rises with the
-size of the group, from $0.02$ for $S_3$ to $0.07$ for $A_5$ at depth
-$2$, which is an ordering by size and not by solvability.  The
-clamped walk also degrades at four times this trained length, to
-$0.34$ at depth $6$.
-
-\begin{table}[ht]
-\centering
-\small
-\begin{tabular}{lcc}
-\hline
-Process & depth 2 & depth 6\\
-\hline
-clamped walk on 5 points & .00 / .15 / .55 & .00 / .05 / .34\\
-$S_3$ on 3 points & .02 / .86 / 1.18 & .02 / .61 / 1.09\\
-$S_4$ on 4 points & .06 / .70 / .93 & .04 / .66 / 1.11\\
-$A_5$ on 5 points & .07 / .80 / 1.10 & .05 / .64 / 1.21\\
-\hline
-\end{tabular}
-\caption{Models trained on $64$ symbols: loss relative to the
-history-free predictor at positions $1$ to $64$ / $65$ to $128$ /
-$129$ to $256$, median of four seeds.}
-\label{tab:a2-long}
-\end{table}
-
-The aperiodic case has its own limit.  For the clamped walk the loss
-at positions $33$ to $64$ falls steadily with depth, to $0.06$.  For
-Z1R it is exact at positions $17$ to $32$ from depth $4$, but at
-positions $33$ to $64$ it varies across seeds from $0.002$ to $2.4$,
-with no trend in depth.
-
 \begin{table}[ht]
 \centering
 \footnotesize
@@ -2242,6 +2175,75 @@ $0.14$, and below $0.05$ from depth $4$.}
 at trained and unseen positions.  Median of four seeds.}
 \label{fig:a2-lg}
 \end{figure}
+
+The latched processes say which property this is.  None of the
+three has a synchronising word, and from depth $2$ they generalise
+as well as the two processes that have one: of their $36$
+models, $34$ are below $0.1$ at positions $33$ to $64$ and twelve are
+below $0.01$; the other two are at $0.22$ and $0.36$.  This holds
+when four components must be told apart and when a clamped walk has
+to be run inside the selected component.  So a reset word is not what
+the aperiodic models rely on.  At depth $1$ all three fail beyond the
+trained length, with median loss between $0.55$ and $0.83$ at
+positions $17$ to $32$, the only aperiodic cases that do.
+
+Two predictions one might draw from Table~\ref{tab:classes} are not
+borne out.  First, the solvable groups do not behave differently
+from $A_5$.  At depths $2$, $4$ and $6$ the losses of the $A_5$
+models and of the models of the three solvable groups are not
+distinguishable at either unseen range (Mann--Whitney $p>0.2$ in all
+six comparisons; at depth $1$ and positions $17$ to $32$ the $A_5$
+models are worse, $p=0.01$).  Second, depth does not buy length.
+For $S_3$, $S_4$ and $A_5$, depth lowers the loss at positions $17$
+to $32$, from between $0.7$ and $1.0$ at depth $1$ to between $0.3$
+and $0.45$ at depth $6$, but not at positions $33$ to $64$; for
+$\mathbb Z_2\times\mathbb Z_3$ it does neither.  Neither observation contradicts
+Corollary~\ref{cor:transformers}, which is asymptotic and concerns
+what can be expressed, not what training finds; at these lengths
+every one of these processes can be predicted exactly at these
+depths \cite{LiuEtAl2023}.  The line that training respects here is
+the one between $\mathrm{AC}^0$ and its complement, not the one
+between solvable and non-solvable groups.
+
+The aperiodic case has its own limit.  For the clamped walk the loss
+at positions $33$ to $64$ falls steadily with depth, to $0.06$.  For
+Z1R it is exact at positions $17$ to $32$ from depth $4$, but at
+positions $33$ to $64$ it varies across seeds from $0.002$ to $2.4$,
+with no trend in depth.
+
+A longer trained length does not change this.  We retrained the
+clamped walk, $S_3$, $S_4$ and $A_5$ at depths $2$ and $6$ on
+histories of $64$ symbols, four seeds each, and evaluated to $256$
+(Table~\ref{tab:a2-long}).  At positions $65$ to $128$ every model of
+the clamped walk is below $0.19$ and every group model is above
+$0.37$; at positions $129$ to $256$ the group models are again no
+better than ignoring the input.  No gap opens between $A_5$ and the
+solvable groups: beyond the trained length they are not
+distinguishable at either depth (Mann--Whitney $p>0.4$ in all four
+comparisons).  Within the trained length the loss rises with the
+size of the group, from $0.02$ for $S_3$ to $0.07$ for $A_5$ at depth
+$2$, which is an ordering by size and not by solvability.  The
+clamped walk also degrades at four times this trained length, to
+$0.34$ at depth $6$.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{lcc}
+\hline
+Process & depth 2 & depth 6\\
+\hline
+clamped walk on 5 points & .00 / .15 / .55 & .00 / .05 / .34\\
+$S_3$ on 3 points & .02 / .86 / 1.18 & .02 / .61 / 1.09\\
+$S_4$ on 4 points & .06 / .70 / .93 & .04 / .66 / 1.11\\
+$A_5$ on 5 points & .07 / .80 / 1.10 & .05 / .64 / 1.21\\
+\hline
+\end{tabular}
+\caption{Models trained on $64$ symbols: loss relative to the
+history-free predictor at positions $1$ to $64$ / $65$ to $128$ /
+$129$ to $256$, median of four seeds.}
+\label{tab:a2-long}
+\end{table}
 
 \paragraph{Element or state.}
 For the last $m$ symbols $w$ of a history ($m=6$, and $m=8$ for $A_5$
@@ -2323,14 +2325,14 @@ distinct elements among chunks of the length used.}
 \end{table}
 
 \paragraph{Limits.}
-The networks are small, and the longest trained length is $64$.  The processes with no synchronising word all
-latch once: what no word erases is chosen at one random time and
+The networks are small, and the longest trained length is $64$.
+The processes with no synchronising word all latch once: what no word erases is chosen at one random time and
 never changes afterwards.  The argument above forces a transient
 part of this kind on any such aperiodic process, so the experiment
 does not show the models keeping a memory that can be rewritten
 indefinitely and never erased; in a strongly connected process that
-needs a non-trivial group.  The readouts are linear, and a non-linear code for $\tau_w$
-would not be found.  For $\mathbb Z_2\times\mathbb Z_3$ the element
+needs a non-trivial group.  The readouts are linear, and a
+non-linear code for $\tau_w$ would not be found.  For $\mathbb Z_2\times\mathbb Z_3$ the element
 is a function of the two states, so that row does not separate the
 hypotheses.  And the experiment concerns predictors that are
 approximate and that fail off the trained lengths, which is outside
@@ -2348,8 +2350,9 @@ aperiodicity and its group complexity are forced, with the bounds
 attained.  For predictors with no recurrent state the same algebra
 fixes the circuit class of exact prediction.  In a small experiment,
 transformers trained on short histories kept predicting on longer
-ones only when $S_p$ was aperiodic, with no difference between
-solvable and non-solvable groups.  The rank profile bounds
+ones only when $S_p$ was aperiodic, whether or not the process had a
+synchronising word, and with no difference between solvable and
+non-solvable groups.  The rank profile bounds
 forced memory word by word, and subgroups sit at rank levels that
 bound them.  Around $S_p$ sit a possibility quotient and a likelihood
 extension that none of these invariants see, and the reset chains and
